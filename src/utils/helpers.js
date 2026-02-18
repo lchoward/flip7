@@ -2,7 +2,7 @@ import { DECK } from "../constants/deck";
 
 export const uid = () => Math.random().toString(36).slice(2, 9);
 
-export function newGame(mode = "tracker") {
+export function newGame(mode = "play") {
   const base = { id: uid(), players: [], rounds: [], createdAt: Date.now(), mode };
   if (mode === "play") {
     base.deck = [];
