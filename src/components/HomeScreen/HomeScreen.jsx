@@ -1,3 +1,4 @@
+import { useEffect } from "react";
 import { useGame } from "../../context/GameContext";
 import { ACTIONS } from "../../context/gameReducer";
 import ConfirmDialog from "../ConfirmDialog/ConfirmDialog";
@@ -25,6 +26,18 @@ export default function HomeScreen() {
       startNewGame();
     }
   };
+
+  // Keyboard shortcut: Enter = New Game
+  useEffect(() => {
+    const handleKey = (e) => {
+      if (dialog) return;
+      if (e.key === "Enter") {
+        confirmNewGame();
+      }
+    };
+    window.addEventListener("keydown", handleKey);
+    return () => window.removeEventListener("keydown", handleKey);
+  }, [dialog, game]);
 
   return (
     <>

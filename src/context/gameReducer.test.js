@@ -118,9 +118,9 @@ describe("LOAD_GAME", () => {
 // ─── START_NEW_GAME ──────────────────────────────────
 
 describe("START_NEW_GAME", () => {
-  it("creates tracker game by default", () => {
+  it("creates play game by default", () => {
     const result = gameReducer(makeState(), { type: ACTIONS.START_NEW_GAME, payload: {} });
-    expect(result.game.mode).toBe("tracker");
+    expect(result.game.mode).toBe("play");
     expect(result.screen).toBe("setup");
     expect(result.dialog).toBeNull();
   });

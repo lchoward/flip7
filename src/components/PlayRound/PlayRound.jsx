@@ -22,6 +22,31 @@ export default function PlayRound() {
     }
   }, [pr?.pendingAction?.type, pr?.pendingAction?.remaining, dispatch]);
 
+  // Keyboard shortcuts: H = Hit, S = Stand, Enter = End Round
+  useEffect(() => {
+    const handleKey = (e) => {
+      if (!pr) return;
+      const pending = pr.pendingAction !== null;
+      const over = !pending && pr.turnOrder.every(pid => pr.playerHands[pid].status !== "playing");
+
+      if (over && e.key === "Enter") {
+        dispatch({ type: ACTIONS.END_PLAY_ROUND });
+        return;
+      }
+
+      if (pending || over) return;
+
+      const key = e.key.toLowerCase();
+      if (key === "h") {
+        dispatch({ type: ACTIONS.PLAYER_HIT });
+      } else if (key === "s") {
+        dispatch({ type: ACTIONS.PLAYER_STAND });
+      }
+    };
+    window.addEventListener("keydown", handleKey);
+    return () => window.removeEventListener("keydown", handleKey);
+  }, [pr, dispatch]);
+
   if (!pr) return null;
 
   const activePlayerId = pr.turnOrder[pr.turnIndex];

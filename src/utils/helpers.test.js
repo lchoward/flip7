@@ -18,13 +18,17 @@ describe("uid", () => {
 });
 
 describe("newGame", () => {
-  it("creates a tracker game by default", () => {
+  it("creates a play game by default", () => {
     const g = newGame();
-    expect(g.mode).toBe("tracker");
+    expect(g.mode).toBe("play");
     expect(g.players).toEqual([]);
     expect(g.rounds).toEqual([]);
     expect(g.id).toBeDefined();
     expect(g.createdAt).toBeDefined();
+    expect(g.deck).toEqual([]);
+    expect(g.dealerIndex).toBe(0);
+    expect(g.playRound).toBeNull();
+    expect(g.tiebreaker).toBeNull();
   });
 
   it("creates a tracker game explicitly", () => {

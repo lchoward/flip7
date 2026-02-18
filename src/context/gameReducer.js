@@ -244,8 +244,7 @@ export function gameReducer(state, action) {
       return { ...state, cheaterMode: !state.cheaterMode };
 
     case ACTIONS.START_NEW_GAME: {
-      const mode = action.payload?.mode || "tracker";
-      const g = newGame(mode);
+      const g = newGame(action.payload?.mode);
       return { ...state, game: g, screen: "setup", dialog: null };
     }
 

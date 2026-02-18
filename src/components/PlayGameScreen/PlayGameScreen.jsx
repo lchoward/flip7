@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { useGame } from "../../context/GameContext";
 import { ACTIONS } from "../../context/gameReducer";
 import { getPlayerTotal } from "../../utils/helpers";
@@ -18,7 +18,7 @@ export default function PlayGameScreen() {
   const dealerPlayer = game.players[dealerIdx];
 
   // Tiebreaker detection after a round ends
-  const handleNewRound = () => {
+  const handleNewRound = useCallback(() => {
     // Check if we need to enter tiebreaker
     if (!winner && !game.tiebreaker) {
       const topScore = sortedPlayers.length > 0 ? getPlayerTotal(game, sortedPlayers[0].id) : 0;
@@ -49,7 +49,19 @@ export default function PlayGameScreen() {
     }
 
     dispatch({ type: ACTIONS.START_PLAY_ROUND });
-  };
+  }, [winner, game.tiebreaker, sortedPlayers, game, dispatch]);
+
+  // Keyboard shortcut: Enter = Deal Next Round
+  useEffect(() => {
+    const handleKey = (e) => {
+      if (winner || menuConfirm) return;
+      if (e.key === "Enter") {
+        handleNewRound();
+      }
+    };
+    window.addEventListener("keydown", handleKey);
+    return () => window.removeEventListener("keydown", handleKey);
+  }, [winner, menuConfirm, handleNewRound]);
 
   const lastRound = game.rounds.length > 0 ? game.rounds[game.rounds.length - 1] : null;
 
