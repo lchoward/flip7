@@ -1,0 +1,61 @@
+.home {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 100vh;
+  gap: 24px;
+  text-align: center;
+}
+
+.logo {
+  font-family: 'Fredoka', sans-serif;
+  font-size: 72px;
+  font-weight: 700;
+  background: linear-gradient(135deg, var(--primary), var(--accent));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  line-height: 1.1;
+  letter-spacing: -2px;
+}
+
+.logoSub {
+  font-size: 16px;
+  color: var(--text-dim);
+  margin-top: -8px;
+  letter-spacing: 4px;
+  text-transform: uppercase;
+}
+
+.homeCards {
+  display: flex;
+  gap: 8px;
+  margin: 16px 0;
+}
+
+.miniCard {
+  width: 44px;
+  height: 62px;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: 'Fredoka', sans-serif;
+  font-weight: 700;
+  font-size: 20px;
+  color: #fff;
+  transform: rotate(var(--rot, 0deg));
+  box-shadow: 0 3px 12px rgba(0,0,0,0.3);
+}
+
+.buttonGroup {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  width: 100%;
+  max-width: 280px;
+}
+
+@media (max-width: 400px) {
+  .logo { font-size: 56px; }
+}

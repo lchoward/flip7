@@ -1,0 +1,110 @@
+.setup { padding-top: 60px; }
+
+.setup h2 {
+  font-size: 28px;
+  margin-bottom: 8px;
+}
+
+.setupSub {
+  color: var(--text-dim);
+  margin-bottom: 24px;
+}
+
+.playerInputRow {
+  display: flex;
+  gap: 10px;
+  margin-bottom: 12px;
+  align-items: center;
+}
+
+.playerInputRow input {
+  flex: 1;
+  padding: 12px 16px;
+  border-radius: var(--radius-sm);
+  border: 2px solid var(--surface2);
+  background: var(--surface);
+  color: var(--text);
+  font-size: 16px;
+  font-family: 'DM Sans', sans-serif;
+  outline: none;
+  transition: border-color 0.2s;
+}
+
+.playerInputRow input:focus { border-color: var(--primary); }
+
+.playerNum {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: var(--surface2);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: 'Fredoka', sans-serif;
+  font-weight: 600;
+  font-size: 14px;
+  color: var(--primary);
+  flex-shrink: 0;
+}
+
+.removeBtn {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: transparent;
+  border: 2px solid var(--accent2);
+  color: var(--accent2);
+  font-size: 18px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  transition: all 0.2s;
+}
+
+.removeBtn:hover { background: var(--accent2); color: #fff; }
+
+.setupActions {
+  display: flex;
+  gap: 12px;
+  margin-top: 24px;
+  flex-wrap: wrap;
+}
+
+.modeToggle {
+  display: flex;
+  gap: 0;
+  margin-bottom: 24px;
+  border-radius: var(--radius-sm);
+  overflow: hidden;
+  border: 2px solid var(--surface2);
+}
+
+.modeBtn {
+  flex: 1;
+  padding: 10px 16px;
+  font-family: 'Fredoka', sans-serif;
+  font-weight: 500;
+  font-size: 14px;
+  border: none;
+  background: var(--surface);
+  color: var(--text-dim);
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.modeBtn:first-child { border-right: 1px solid var(--surface2); }
+
+.modeActive {
+  background: var(--primary);
+  color: #0f1923;
+  font-weight: 600;
+}
+
+.maxWarning {
+  color: var(--accent);
+  font-size: 12px;
+  margin-top: -8px;
+  margin-bottom: 12px;
+}

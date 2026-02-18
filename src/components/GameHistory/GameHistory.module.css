@@ -1,0 +1,59 @@
+.panel {
+  background: var(--surface);
+  border-radius: var(--radius);
+  padding: 16px;
+  margin-bottom: 12px;
+}
+
+.title {
+  font-family: 'Fredoka', sans-serif;
+  font-weight: 700;
+  font-size: 18px;
+  color: var(--primary);
+  margin-bottom: 12px;
+}
+
+.empty {
+  color: var(--text-dim);
+  font-size: 14px;
+  text-align: center;
+  padding: 16px 0;
+}
+
+.roundRow {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 10px 0;
+  border-bottom: 1px solid var(--surface2);
+}
+
+.roundRow:last-child {
+  border-bottom: none;
+}
+
+.roundNumber {
+  font-family: 'Fredoka', sans-serif;
+  font-weight: 700;
+  font-size: 14px;
+  color: var(--text-dim);
+  min-width: 32px;
+}
+
+.roundPlayers {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.playerChip {
+  background: var(--surface2);
+  border-radius: var(--radius-sm);
+  padding: 4px 10px;
+  font-size: 12px;
+  color: var(--text);
+}
+
+.playerChip.busted {
+  color: var(--accent2);
+}

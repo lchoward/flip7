@@ -1,0 +1,50 @@
+.btn {
+  font-family: 'Fredoka', sans-serif;
+  font-size: 18px;
+  font-weight: 600;
+  padding: 14px 32px;
+  border: none;
+  border-radius: 50px;
+  cursor: pointer;
+  transition: all 0.2s;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  user-select: none;
+}
+
+.btn:active { transform: scale(0.96); }
+
+.btn-primary {
+  background: linear-gradient(135deg, var(--primary), var(--primary-dim));
+  color: var(--bg);
+  box-shadow: 0 4px 20px rgba(0, 212, 170, 0.3);
+}
+
+.btn-primary:hover { box-shadow: 0 4px 28px rgba(0, 212, 170, 0.5); }
+
+.btn-secondary {
+  background: var(--surface2);
+  color: var(--text);
+  border: 2px solid var(--surface2);
+}
+
+.btn-secondary:hover { border-color: var(--primary); }
+
+.btn-danger {
+  background: transparent;
+  color: var(--accent2);
+  border: 2px solid var(--accent2);
+}
+
+.btn-small {
+  font-size: 14px;
+  padding: 8px 18px;
+}
+
+.btn-ghost {
+  background: transparent;
+  color: var(--text-dim);
+  padding: 8px 16px;
+  font-size: 14px;
+}

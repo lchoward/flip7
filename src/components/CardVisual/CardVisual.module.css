@@ -1,0 +1,71 @@
+.card {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 40px;
+  height: 52px;
+  padding: 4px 8px;
+  border-radius: 8px;
+  font-family: 'Fredoka', sans-serif;
+  font-weight: 600;
+  font-size: 18px;
+  color: #fff;
+  text-shadow: 0 1px 2px rgba(0,0,0,0.3);
+  box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+  flex-shrink: 0;
+  transition: transform 0.2s, opacity 0.2s;
+  animation: cardIn 0.3s ease-out;
+}
+
+.number {
+  /* bg set inline via hsl */
+}
+
+.modifier {
+  background: linear-gradient(135deg, #f0a030, #e08820);
+  font-size: 15px;
+  min-width: 44px;
+}
+
+.action {
+  background: linear-gradient(135deg, #9b59b6, #8e44ad);
+  font-size: 12px;
+  min-width: 56px;
+  padding: 4px 6px;
+}
+
+.small {
+  min-width: 30px;
+  height: 38px;
+  font-size: 14px;
+  padding: 2px 6px;
+}
+
+.small.modifier {
+  font-size: 12px;
+  min-width: 34px;
+}
+
+.small.action {
+  font-size: 10px;
+  min-width: 42px;
+}
+
+.dimmed {
+  opacity: 0.4;
+}
+
+.highlight {
+  box-shadow: 0 0 0 2px var(--accent2), 0 2px 8px rgba(0,0,0,0.2);
+}
+
+@keyframes cardIn {
+  from {
+    opacity: 0;
+    transform: scale(0.7) translateY(-8px);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}

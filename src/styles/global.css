@@ -1,0 +1,52 @@
+@import url('https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&family=DM+Sans:wght@400;500;600;700&display=swap');
+
+:root {
+  --bg: #0f1923;
+  --surface: #1a2735;
+  --surface2: #223344;
+  --primary: #00d4aa;
+  --primary-dim: #00a885;
+  --accent: #ffb347;
+  --accent2: #ff6b6b;
+  --text: #e8f0f8;
+  --text-dim: #8899aa;
+  --card-bg: #fff;
+  --card-shadow: 0 4px 20px rgba(0,0,0,0.3);
+  --radius: 16px;
+  --radius-sm: 10px;
+}
+
+* { margin: 0; padding: 0; box-sizing: border-box; }
+
+body {
+  font-family: 'DM Sans', sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+#root { min-height: 100vh; }
+
+.app {
+  max-width: 720px;
+  margin: 0 auto;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  padding: 0 16px 100px 16px;
+}
+
+h1, h2, h3 { font-family: 'Fredoka', sans-serif; }
+
+@keyframes pop {
+  0% { transform: scale(0.8); opacity: 0; }
+  100% { transform: scale(1); opacity: 1; }
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.fade-in { animation: fadeIn 0.3s ease-out; }

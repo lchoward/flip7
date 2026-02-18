@@ -1,0 +1,320 @@
+.playRound {
+  padding-top: 20px;
+  padding-bottom: 100px;
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 8px;
+}
+
+.header h2 {
+  font-size: 24px;
+  margin: 0;
+}
+
+.cheaterToggle {
+  padding: 6px 14px;
+  border-radius: 20px;
+  border: 2px solid var(--surface2);
+  background: var(--surface);
+  color: var(--text-dim);
+  font-family: 'Fredoka', sans-serif;
+  font-size: 12px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.cheaterActive {
+  border-color: var(--accent);
+  color: var(--accent);
+  background: rgba(255, 179, 71, 0.1);
+}
+
+.deckCount {
+  font-size: 13px;
+  color: var(--text-dim);
+  margin-bottom: 16px;
+  font-family: 'DM Sans', sans-serif;
+}
+
+.tiebreakerBanner {
+  background: linear-gradient(135deg, var(--accent), var(--accent2));
+  color: #fff;
+  padding: 10px 16px;
+  border-radius: var(--radius-sm);
+  font-family: 'Fredoka', sans-serif;
+  font-weight: 600;
+  font-size: 14px;
+  text-align: center;
+  margin-bottom: 16px;
+}
+
+.playerSection {
+  background: var(--surface);
+  border-radius: var(--radius);
+  padding: 14px 16px;
+  margin-bottom: 12px;
+  border: 2px solid transparent;
+  transition: border-color 0.2s;
+}
+
+.playerSection.active {
+  border-color: var(--primary);
+}
+
+.playerSection.busted {
+  border-color: var(--accent2);
+  opacity: 0.7;
+}
+
+.playerSection.stood {
+  border-color: var(--surface2);
+  opacity: 0.85;
+}
+
+.playerHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 10px;
+}
+
+.playerName {
+  font-family: 'Fredoka', sans-serif;
+  font-weight: 600;
+  font-size: 16px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.statusBadge {
+  font-size: 10px;
+  font-weight: 600;
+  padding: 2px 8px;
+  border-radius: 10px;
+  background: var(--surface2);
+  color: var(--text-dim);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.bustBadge {
+  background: var(--accent2);
+  color: #fff;
+}
+
+.activeBadge {
+  background: var(--primary);
+  color: #0f1923;
+}
+
+.playerScore {
+  font-family: 'Fredoka', sans-serif;
+  font-weight: 700;
+  font-size: 22px;
+  color: var(--text);
+}
+
+.bustScore {
+  color: var(--accent2);
+}
+
+.cardRow {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+  margin-bottom: 8px;
+  min-height: 52px;
+  align-items: center;
+}
+
+.noCards {
+  color: var(--text-dim);
+  font-size: 13px;
+  font-style: italic;
+}
+
+.scoreBreakdown {
+  font-size: 12px;
+  color: var(--text-dim);
+  font-family: 'DM Sans', sans-serif;
+  margin-bottom: 4px;
+}
+
+.shieldBadge {
+  display: inline-block;
+  font-size: 11px;
+  padding: 2px 10px;
+  border-radius: 10px;
+  background: rgba(0, 212, 170, 0.15);
+  color: var(--primary);
+  font-family: 'Fredoka', sans-serif;
+  font-weight: 500;
+  margin-bottom: 6px;
+}
+
+.flip7Badge {
+  display: inline-block;
+  font-size: 12px;
+  padding: 3px 12px;
+  border-radius: 10px;
+  background: linear-gradient(135deg, var(--primary), var(--accent));
+  color: #0f1923;
+  font-family: 'Fredoka', sans-serif;
+  font-weight: 700;
+  margin-bottom: 6px;
+}
+
+.bustChanceBanner {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 12px;
+  border-radius: 8px;
+  margin-top: 4px;
+  margin-bottom: 6px;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 13px;
+}
+
+.bustSafe { background: rgba(46, 204, 113, 0.15); color: #2ecc71; }
+.bustCaution { background: rgba(241, 196, 15, 0.15); color: #f1c40f; }
+.bustWarning { background: rgba(230, 126, 34, 0.15); color: #e67e22; }
+.bustDanger { background: rgba(231, 76, 60, 0.15); color: #e74c3c; }
+
+.bustChanceValue {
+  font-family: 'Fredoka', sans-serif;
+  font-weight: 700;
+  font-size: 16px;
+}
+
+.bustChanceLabel {
+  font-size: 12px;
+  opacity: 0.8;
+}
+
+.actionButtons {
+  display: flex;
+  gap: 10px;
+  margin-top: 10px;
+}
+
+.actionButtons .btn {
+  flex: 1;
+}
+
+.roundOverBar {
+  position: sticky;
+  bottom: 0;
+  background: var(--bg);
+  padding: 16px 0;
+  border-top: 1px solid var(--surface2);
+  text-align: center;
+}
+
+.roundOverLabel {
+  font-family: 'Fredoka', sans-serif;
+  font-weight: 600;
+  font-size: 16px;
+  color: var(--primary);
+  margin-bottom: 10px;
+}
+
+.pendingActionBar {
+  background: linear-gradient(135deg, rgba(139, 92, 246, 0.15), rgba(139, 92, 246, 0.05));
+  border: 2px solid rgba(139, 92, 246, 0.4);
+  border-radius: var(--radius);
+  padding: 14px 16px;
+  margin-bottom: 12px;
+}
+
+.pendingActionBar.secondChance {
+  background: linear-gradient(135deg, rgba(0, 212, 170, 0.15), rgba(0, 212, 170, 0.05));
+  border-color: rgba(0, 212, 170, 0.4);
+}
+
+.pendingLabel {
+  font-family: 'Fredoka', sans-serif;
+  font-weight: 600;
+  font-size: 14px;
+  color: var(--text);
+  margin-bottom: 10px;
+}
+
+.targetButtons {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.targetBtn {
+  background: rgba(139, 92, 246, 0.2) !important;
+  border: 2px solid rgba(139, 92, 246, 0.5) !important;
+  color: var(--text) !important;
+  font-family: 'Fredoka', sans-serif;
+  font-weight: 500;
+  padding: 8px 16px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.targetBtn:hover {
+  background: rgba(139, 92, 246, 0.35) !important;
+  border-color: rgba(139, 92, 246, 0.8) !important;
+}
+
+.targetBtnSC {
+  background: rgba(0, 212, 170, 0.2) !important;
+  border-color: rgba(0, 212, 170, 0.5) !important;
+}
+
+.targetBtnSC:hover {
+  background: rgba(0, 212, 170, 0.35) !important;
+  border-color: rgba(0, 212, 170, 0.8) !important;
+}
+
+.pendingActionBar.dealing {
+  background: linear-gradient(135deg, rgba(139, 92, 246, 0.15), rgba(139, 92, 246, 0.05));
+  border-color: rgba(139, 92, 246, 0.4);
+}
+
+.dealingDots {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+.dealingDot {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: rgba(139, 92, 246, 0.8);
+  animation: dotPulse 0.5s ease-out;
+}
+
+.dealingDotEmpty {
+  background: rgba(139, 92, 246, 0.2);
+  animation: none;
+}
+
+@keyframes dotPulse {
+  from {
+    transform: scale(0);
+    opacity: 0;
+  }
+  to {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+@media (max-width: 400px) {
+  .cardRow { gap: 4px; }
+}

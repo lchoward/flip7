@@ -1,0 +1,302 @@
+.roundEntry { padding-top: 20px; }
+
+.roundHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 16px;
+}
+
+.roundHeader h2 {
+  font-size: 24px;
+  margin: 0;
+}
+
+.cheaterToggle {
+  font-family: 'Fredoka', sans-serif;
+  font-size: 11px;
+  font-weight: 600;
+  padding: 6px 12px;
+  border-radius: 20px;
+  border: 1px solid var(--surface2);
+  background: var(--surface2);
+  color: var(--text-dim);
+  cursor: pointer;
+  transition: all 0.2s;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.cheaterActive {
+  border-color: var(--accent);
+  background: rgba(255, 179, 71, 0.15);
+  color: var(--accent);
+}
+
+.playerSection {
+  background: var(--surface);
+  border-radius: var(--radius);
+  padding: 16px;
+  margin-bottom: 12px;
+  border: 2px solid transparent;
+  transition: border-color 0.2s;
+}
+
+.playerSection.active { border-color: var(--primary); }
+.playerSection.bustedSection { border-color: var(--accent2); background: rgba(255,107,107,0.06); }
+.playerSection.bustedSection.active { border-color: var(--accent2); }
+
+.playerHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 12px;
+  cursor: pointer;
+}
+
+.playerName {
+  font-family: 'Fredoka', sans-serif;
+  font-weight: 600;
+  font-size: 18px;
+}
+
+.playerScore {
+  font-family: 'Fredoka', sans-serif;
+  font-weight: 700;
+  font-size: 22px;
+  color: var(--primary);
+}
+
+.playerScore.bust { color: var(--accent2); }
+
+.bustBanner {
+  background: rgba(255,107,107,0.15);
+  border: 1px solid var(--accent2);
+  border-radius: var(--radius-sm);
+  color: var(--accent2);
+  font-family: 'Fredoka', sans-serif;
+  font-weight: 600;
+  font-size: 14px;
+  padding: 10px 14px;
+  margin-bottom: 12px;
+}
+
+.cardPickerLabel {
+  font-size: 12px;
+  color: var(--text-dim);
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  font-weight: 600;
+  margin-bottom: 8px;
+  margin-top: 12px;
+}
+
+.cardPicker {
+  display: flex;
+  gap: 6px;
+}
+
+.pickCard {
+  width: 44px;
+  min-width: 44px;
+  height: 56px;
+  border-radius: 8px;
+  border: 2px solid var(--surface2);
+  background: var(--surface2);
+  color: var(--text);
+  font-family: 'Fredoka', sans-serif;
+  font-weight: 700;
+  font-size: 16px;
+  cursor: pointer;
+  transition: all 0.15s;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  user-select: none;
+}
+
+.pickCard:active { transform: scale(0.92); }
+.pickCard.selected { border-color: var(--primary); background: rgba(0,212,170,0.15); color: var(--primary); }
+
+.cardCountBadge {
+  position: absolute;
+  top: -6px;
+  right: -6px;
+  background: var(--primary);
+  color: var(--bg);
+  font-size: 10px;
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.modifier { font-size: 13px; width: 52px; min-width: 52px; }
+.modifier.selected { border-color: var(--accent); background: rgba(255,179,71,0.15); color: var(--accent); }
+
+.action { font-size: 11px; width: 80px; min-width: 80px; }
+.action.selected { border-color: #6c5ce7; background: rgba(108,92,231,0.15); color: #6c5ce7; }
+
+.selectedCards {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+  margin-top: 8px;
+  min-height: 32px;
+}
+
+.selectedChip {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  padding: 4px 10px;
+  background: rgba(0,212,170,0.15);
+  border-radius: 16px;
+  font-family: 'Fredoka', sans-serif;
+  font-size: 14px;
+  color: var(--primary);
+}
+
+.modChip {
+  background: rgba(255,179,71,0.15);
+  color: var(--accent);
+}
+
+.actionChip {
+  background: rgba(108,92,231,0.15);
+  color: #6c5ce7;
+}
+
+.chipRemove {
+  cursor: pointer;
+  font-size: 16px;
+  line-height: 1;
+  opacity: 0.7;
+}
+
+.chipRemove:hover { opacity: 1; }
+
+.scoreBreakdown {
+  margin-top: 10px;
+  padding: 10px 12px;
+  background: var(--bg);
+  border-radius: var(--radius-sm);
+  font-size: 13px;
+  color: var(--text-dim);
+}
+
+.roundActions {
+  display: flex;
+  gap: 12px;
+  padding: 16px 0;
+  position: sticky;
+  bottom: 0;
+  background: var(--bg);
+}
+
+.pickCard.maxed {
+  border-color: var(--accent2);
+  background: rgba(255,107,107,0.15);
+  color: var(--accent2);
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.pickCard.flip7Locked {
+  opacity: 0.4;
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
+.bustChanceBanner {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 14px;
+  border-radius: var(--radius-sm);
+  margin-bottom: 12px;
+  border: 1px solid;
+}
+
+.bustChanceValue {
+  font-family: 'Fredoka', sans-serif;
+  font-weight: 700;
+  font-size: 20px;
+}
+
+.bustChanceLabel {
+  font-size: 12px;
+  opacity: 0.85;
+}
+
+.bustSafe {
+  background: rgba(0, 212, 170, 0.1);
+  border-color: rgba(0, 212, 170, 0.3);
+  color: var(--primary);
+}
+
+.bustCaution {
+  background: rgba(255, 179, 71, 0.1);
+  border-color: rgba(255, 179, 71, 0.3);
+  color: var(--accent);
+}
+
+.bustWarning {
+  background: rgba(255, 152, 71, 0.1);
+  border-color: rgba(255, 152, 71, 0.3);
+  color: #ff9847;
+}
+
+.bustDanger {
+  background: rgba(255, 107, 107, 0.1);
+  border-color: rgba(255, 107, 107, 0.3);
+  color: var(--accent2);
+}
+
+.dealTimeline {
+  margin-bottom: 16px;
+  padding: 12px;
+  background: var(--surface);
+  border-radius: var(--radius);
+}
+
+.timelineChips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+}
+
+.timelineChip {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  padding: 2px 8px;
+  border-radius: 12px;
+  font-family: 'Fredoka', sans-serif;
+  font-size: 11px;
+  background: rgba(0, 212, 170, 0.1);
+  color: var(--primary);
+}
+
+.timelineMod {
+  background: rgba(255, 179, 71, 0.1);
+  color: var(--accent);
+}
+
+.timelineAction {
+  background: rgba(108, 92, 231, 0.1);
+  color: #6c5ce7;
+}
+
+.seqNum {
+  font-weight: 700;
+  margin-right: 2px;
+}
+
+@media (max-width: 400px) {
+  .pickCard { width: 38px; min-width: 38px; height: 50px; font-size: 14px; }
+  .modifier { width: 46px; min-width: 46px; font-size: 12px; }
+}
