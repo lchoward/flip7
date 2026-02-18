@@ -3,6 +3,7 @@ import { useGame } from "../../context/GameContext";
 import { ACTIONS } from "../../context/gameReducer";
 import { calculateScore } from "../../utils/scoring";
 import { calculateBustChance } from "../../utils/bustCalculator";
+import { decideAction, chooseFlipThreeTarget, chooseSecondChanceTarget } from "../../utils/computerStrategy";
 import CardVisual from "../CardVisual/CardVisual";
 import DeckTracker from "../DeckTracker/DeckTracker";
 import styles from "./PlayRound.module.css";
@@ -36,6 +37,10 @@ export default function PlayRound() {
 
       if (pending || over) return;
 
+      // Disable hit/stand shortcuts during CPU turns
+      const activePid = pr.turnOrder[pr.turnIndex];
+      if (game.players.find(p => p.id === activePid)?.isComputer) return;
+
       const key = e.key.toLowerCase();
       if (key === "h") {
         dispatch({ type: ACTIONS.PLAYER_HIT });
@@ -45,7 +50,77 @@ export default function PlayRound() {
     };
     window.addEventListener("keydown", handleKey);
     return () => window.removeEventListener("keydown", handleKey);
-  }, [pr, dispatch]);
+  }, [pr, game.players, dispatch]);
+
+  // Auto-play for computer players
+  useEffect(() => {
+    if (!pr) return;
+    const pending = pr.pendingAction;
+    const over = !pending && pr.turnOrder.every(pid => pr.playerHands[pid].status !== "playing");
+
+    // Handle pending actions from computer choosers
+    if (pending?.type === "flip_three_target") {
+      const chooser = game.players.find(p => p.id === pending.chooserId);
+      if (chooser?.isComputer) {
+        const playingIds = pr.turnOrder.filter(pid => pr.playerHands[pid].status === "playing");
+        const timer = setTimeout(() => {
+          const target = chooseFlipThreeTarget(pending.chooserId, playingIds, game);
+          dispatch({ type: ACTIONS.RESOLVE_FLIP_THREE, payload: { targetPlayerId: target } });
+        }, 800);
+        return () => clearTimeout(timer);
+      }
+      return;
+    }
+
+    if (pending?.type === "second_chance_gift") {
+      const chooser = game.players.find(p => p.id === pending.sourcePlayerId);
+      if (chooser?.isComputer) {
+        const timer = setTimeout(() => {
+          const target = chooseSecondChanceTarget(pending.eligiblePlayerIds, game);
+          dispatch({ type: ACTIONS.RESOLVE_SECOND_CHANCE, payload: { targetPlayerId: target } });
+        }, 800);
+        return () => clearTimeout(timer);
+      }
+      return;
+    }
+
+    // Skip if dealing animation or other pending action
+    if (pending || over) return;
+
+    const activePid = pr.turnOrder[pr.turnIndex];
+    const player = game.players.find(p => p.id === activePid);
+    if (!player?.isComputer) return;
+
+    const hand = pr.playerHands[activePid];
+    const timer = setTimeout(() => {
+      const action = decideAction({
+        playerId: activePid,
+        hand,
+        dealt: getEffectiveDealtCards(),
+        allPlayerData: (() => {
+          const data = {};
+          for (const [pid, h] of Object.entries(pr.playerHands)) {
+            const cancelledNumbers = (h.cancelledCards || []).filter(c => c.type === "number").map(c => c.value);
+            const cancelledModifiers = (h.cancelledCards || []).filter(c => c.type === "modifier").map(c => c.value);
+            const cancelledActions = (h.cancelledCards || []).filter(c => c.type === "action").map(c => c.value);
+            data[pid] = {
+              numberCards: [...h.numberCards, ...cancelledNumbers],
+              modifiers: [...h.modifiers, ...cancelledModifiers],
+              actions: [...h.actions, ...cancelledActions],
+            };
+          }
+          return data;
+        })(),
+        game,
+      });
+      if (action === "hit") {
+        dispatch({ type: ACTIONS.PLAYER_HIT });
+      } else {
+        dispatch({ type: ACTIONS.PLAYER_STAND });
+      }
+    }, 800);
+    return () => clearTimeout(timer);
+  }, [pr, game, getEffectiveDealtCards, dispatch]);
 
   if (!pr) return null;
 
@@ -55,6 +130,7 @@ export default function PlayRound() {
   const roundOver = !isPending && pr.turnOrder.every(pid => pr.playerHands[pid].status !== "playing");
 
   const getPlayerName = (pid) => game.players.find(p => p.id === pid)?.name || "?";
+  const isComputerPlayer = (pid) => game.players.find(p => p.id === pid)?.isComputer === true;
 
   // Build allPlayerData for bust calc (matches deckUtils shape)
   // Include cancelled cards so remaining-card counts stay accurate
@@ -98,25 +174,38 @@ export default function PlayRound() {
       {/* Flip Three target selection */}
       {pendingAction?.type === "flip_three_target" && (
         <div className={styles.pendingActionBar}>
-          <div className={styles.pendingLabel}>
-            Flip Three! {getPlayerName(pendingAction.chooserId)} picks a target:
-          </div>
-          <div className={styles.targetButtons}>
-            {pr.turnOrder
-              .filter(pid => pr.playerHands[pid].status === "playing")
-              .map(pid => (
-                <button
-                  key={pid}
-                  className={`btn btn-small ${styles.targetBtn}`}
-                  onClick={() => dispatch({
-                    type: ACTIONS.RESOLVE_FLIP_THREE,
-                    payload: { targetPlayerId: pid },
-                  })}
-                >
-                  {getPlayerName(pid)}
-                </button>
-              ))}
-          </div>
+          {isComputerPlayer(pendingAction.chooserId) ? (
+            <div className={styles.pendingLabel}>
+              Flip Three! {getPlayerName(pendingAction.chooserId)} is choosing a target
+              <span className={styles.cpuThinking}>
+                <span className={styles.thinkingDot} />
+                <span className={styles.thinkingDot} />
+                <span className={styles.thinkingDot} />
+              </span>
+            </div>
+          ) : (
+            <>
+              <div className={styles.pendingLabel}>
+                Flip Three! {getPlayerName(pendingAction.chooserId)} picks a target:
+              </div>
+              <div className={styles.targetButtons}>
+                {pr.turnOrder
+                  .filter(pid => pr.playerHands[pid].status === "playing")
+                  .map(pid => (
+                    <button
+                      key={pid}
+                      className={`btn btn-small ${styles.targetBtn}`}
+                      onClick={() => dispatch({
+                        type: ACTIONS.RESOLVE_FLIP_THREE,
+                        payload: { targetPlayerId: pid },
+                      })}
+                    >
+                      {getPlayerName(pid)}
+                    </button>
+                  ))}
+              </div>
+            </>
+          )}
         </div>
       )}
 
@@ -140,23 +229,36 @@ export default function PlayRound() {
       {/* Second Chance gift selection */}
       {pendingAction?.type === "second_chance_gift" && (
         <div className={`${styles.pendingActionBar} ${styles.secondChance}`}>
-          <div className={styles.pendingLabel}>
-            Extra Second Chance! {getPlayerName(pendingAction.sourcePlayerId)} gives it to:
-          </div>
-          <div className={styles.targetButtons}>
-            {pendingAction.eligiblePlayerIds.map(pid => (
-              <button
-                key={pid}
-                className={`btn btn-small ${styles.targetBtn} ${styles.targetBtnSC}`}
-                onClick={() => dispatch({
-                  type: ACTIONS.RESOLVE_SECOND_CHANCE,
-                  payload: { targetPlayerId: pid },
-                })}
-              >
-                {getPlayerName(pid)}
-              </button>
-            ))}
-          </div>
+          {isComputerPlayer(pendingAction.sourcePlayerId) ? (
+            <div className={styles.pendingLabel}>
+              Extra Second Chance! {getPlayerName(pendingAction.sourcePlayerId)} is choosing
+              <span className={styles.cpuThinking}>
+                <span className={styles.thinkingDot} />
+                <span className={styles.thinkingDot} />
+                <span className={styles.thinkingDot} />
+              </span>
+            </div>
+          ) : (
+            <>
+              <div className={styles.pendingLabel}>
+                Extra Second Chance! {getPlayerName(pendingAction.sourcePlayerId)} gives it to:
+              </div>
+              <div className={styles.targetButtons}>
+                {pendingAction.eligiblePlayerIds.map(pid => (
+                  <button
+                    key={pid}
+                    className={`btn btn-small ${styles.targetBtn} ${styles.targetBtnSC}`}
+                    onClick={() => dispatch({
+                      type: ACTIONS.RESOLVE_SECOND_CHANCE,
+                      payload: { targetPlayerId: pid },
+                    })}
+                  >
+                    {getPlayerName(pid)}
+                  </button>
+                ))}
+              </div>
+            </>
+          )}
         </div>
       )}
 
@@ -179,6 +281,7 @@ export default function PlayRound() {
             <div className={styles.playerHeader}>
               <div className={styles.playerName}>
                 {getPlayerName(pid)}
+                {isComputerPlayer(pid) && <span className={styles.cpuBadge}>CPU</span>}
                 {hand.status === "frozen" && <span className={styles.statusBadge}>FROZEN</span>}
                 {hand.status === "stood" && <span className={styles.statusBadge}>STOOD</span>}
                 {hand.status === "busted" && <span className={`${styles.statusBadge} ${styles.bustBadge}`}>BUST</span>}
@@ -244,7 +347,16 @@ export default function PlayRound() {
               );
             })()}
 
-            {isActive && (
+            {isActive && isComputerPlayer(pid) && (
+              <div className={styles.cpuThinking}>
+                Thinking
+                <span className={styles.thinkingDot} />
+                <span className={styles.thinkingDot} />
+                <span className={styles.thinkingDot} />
+              </div>
+            )}
+
+            {isActive && !isComputerPlayer(pid) && (
               <div className={styles.actionButtons}>
                 <button
                   className="btn btn-primary btn-small"

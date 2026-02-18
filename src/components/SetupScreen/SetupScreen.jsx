@@ -17,7 +17,15 @@ export default function SetupScreen() {
 
   const addPlayer = () => {
     if (game.players.length >= MAX_PLAYERS) return;
-    updateGame({ players: [...game.players, { id: uid(), name: "" }] });
+    updateGame({ players: [...game.players, { id: uid(), name: "", isComputer: false }] });
+  };
+
+  const addCpu = () => {
+    if (game.players.length >= MAX_PLAYERS) return;
+    const cpuCount = game.players.filter(p => p.isComputer).length;
+    updateGame({
+      players: [...game.players, { id: uid(), name: `CPU ${cpuCount + 1}`, isComputer: true }],
+    });
   };
 
   const startGame = () => {
@@ -61,7 +69,7 @@ export default function SetupScreen() {
       </p>
 
       {game.players.map((p, i) => (
-        <div key={p.id} className={styles.playerInputRow}>
+        <div key={p.id} className={`${styles.playerInputRow} ${p.isComputer ? styles.cpuRow : ""}`}>
           <div className={styles.playerNum}>{i + 1}</div>
           <input
             value={p.name}
@@ -70,12 +78,13 @@ export default function SetupScreen() {
               players[i] = { ...players[i], name: e.target.value };
               updateGame({ players });
             }}
-            placeholder={`Player ${i + 1}`}
+            placeholder={p.isComputer ? `CPU ${i + 1}` : `Player ${i + 1}`}
             autoFocus={i === game.players.length - 1}
             onKeyDown={e => {
               if (e.key === "Enter") addPlayer();
             }}
           />
+          {p.isComputer && <span className={styles.cpuBadge}>CPU</span>}
           {game.players.length > 2 && (
             <button className={styles.removeBtn} onClick={() => {
               updateGame({ players: game.players.filter((_, j) => j !== i) });
@@ -90,9 +99,16 @@ export default function SetupScreen() {
 
       <div className={styles.setupActions}>
         {game.players.length < MAX_PLAYERS && (
-          <button className="btn btn-secondary btn-small" onClick={addPlayer}>
-            + Add Player
-          </button>
+          <>
+            <button className="btn btn-secondary btn-small" onClick={addPlayer}>
+              + Add Player
+            </button>
+            {isPlayMode && (
+              <button className={`btn btn-secondary btn-small ${styles.addCpuBtn}`} onClick={addCpu}>
+                + Add CPU
+              </button>
+            )}
+          </>
         )}
         <button
           className="btn btn-primary btn-small"

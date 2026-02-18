@@ -315,6 +315,47 @@
   }
 }
 
+.cpuBadge {
+  font-size: 10px;
+  font-weight: 700;
+  padding: 2px 8px;
+  border-radius: 10px;
+  background: rgba(255, 179, 71, 0.15);
+  color: var(--accent);
+  font-family: 'Fredoka', sans-serif;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.cpuThinking {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  font-family: 'Fredoka', sans-serif;
+  font-size: 13px;
+  font-weight: 500;
+  color: var(--accent);
+  margin-top: 8px;
+  padding: 6px 0;
+}
+
+.thinkingDot {
+  display: inline-block;
+  width: 6px;
+  height: 6px;
+  border-radius: 50%;
+  background: var(--accent);
+  animation: thinkPulse 1.2s ease-in-out infinite;
+}
+
+.thinkingDot:nth-child(2) { animation-delay: 0.2s; }
+.thinkingDot:nth-child(3) { animation-delay: 0.4s; }
+
+@keyframes thinkPulse {
+  0%, 80%, 100% { opacity: 0.2; transform: scale(0.8); }
+  40% { opacity: 1; transform: scale(1.2); }
+}
+
 @media (max-width: 400px) {
   .cardRow { gap: 4px; }
 }
