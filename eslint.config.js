@@ -26,4 +26,10 @@ export default defineConfig([
       'no-unused-vars': ['error', { varsIgnorePattern: '^[A-Z_]' }],
     },
   },
+  {
+    files: ['**/*.test.js', '**/test-helpers.js'],
+    rules: {
+      'react-refresh/only-export-components': 'off',
+    },
+  },
 ])

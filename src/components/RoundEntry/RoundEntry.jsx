@@ -135,6 +135,7 @@ export default function RoundEntry() {
       shufflePromptShown.current = true;
       setShowShufflePrompt(true);
     }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [playerData]);
 
   const handleSave = () => {
