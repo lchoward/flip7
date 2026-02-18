@@ -109,6 +109,7 @@ export default function PlayGameScreen() {
                   <div className={styles.playerName}>
                     {p.name}
                     {isDealer && <span className={styles.dealerBadge}>D</span>}
+                    {p.isComputer && <span className={styles.cpuBadge}>CPU</span>}
                   </div>
                   {lastResult && (
                     <div className={styles.playerLastRound}>

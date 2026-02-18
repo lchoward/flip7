@@ -119,6 +119,18 @@
   font-size: 11px;
 }
 
+.cpuBadge {
+  font-size: 10px;
+  font-weight: 700;
+  padding: 2px 8px;
+  border-radius: 10px;
+  background: rgba(255, 179, 71, 0.15);
+  color: var(--accent);
+  font-family: 'Fredoka', sans-serif;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
 .playerLastRound {
   font-size: 12px;
   color: var(--text-dim);
