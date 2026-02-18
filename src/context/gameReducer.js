@@ -62,8 +62,21 @@ function dealOneCard(deck, hand, playerId, dealLog) {
 
     if (hasDuplicateNumbers(newHand.numberCards)) {
       if (newHand.hasSecondChance) {
+        const removedNumber = newHand.numberCards[newHand.numberCards.length - 1];
         newHand.numberCards = newHand.numberCards.slice(0, -1);
         newHand.hasSecondChance = false;
+        // Remove one "Second Chance" from actions (consumed)
+        const scIdx = newHand.actions.indexOf("Second Chance");
+        if (scIdx !== -1) {
+          newHand.actions = [...newHand.actions];
+          newHand.actions.splice(scIdx, 1);
+        }
+        // Track both cancelled cards for visibility
+        newHand.cancelledCards = [
+          ...(newHand.cancelledCards || []),
+          { type: "number", value: removedNumber },
+          { type: "action", value: "Second Chance" },
+        ];
         newLog.push({ playerId, card, event: "second_chance_save" });
       } else {
         newHand.status = "busted";
@@ -331,6 +344,7 @@ export function gameReducer(state, action) {
           numberCards: [],
           modifiers: [],
           actions: [],
+          cancelledCards: [],
           status: "playing",
           hasSecondChance: false,
         };
@@ -651,10 +665,21 @@ export function gameReducer(state, action) {
       const { targetPlayerId } = action.payload;
       const pending = pr.pendingAction;
 
-      // Give the target player Second Chance
+      // Move the Second Chance from source's actions to target's actions
+      const sourceHand = { ...pr.playerHands[pending.sourcePlayerId] };
+      const scIdx = sourceHand.actions.indexOf("Second Chance");
+      if (scIdx !== -1) {
+        sourceHand.actions = [...sourceHand.actions];
+        sourceHand.actions.splice(scIdx, 1);
+      }
+      const targetHand = { ...pr.playerHands[targetPlayerId] };
+      targetHand.actions = [...targetHand.actions, "Second Chance"];
+      targetHand.hasSecondChance = true;
+
       const newHands = {
         ...pr.playerHands,
-        [targetPlayerId]: { ...pr.playerHands[targetPlayerId], hasSecondChance: true },
+        [pending.sourcePlayerId]: sourceHand,
+        [targetPlayerId]: targetHand,
       };
       const newLog = [...pr.dealLog, {
         playerId: targetPlayerId,
@@ -694,10 +719,14 @@ export function gameReducer(state, action) {
       for (const [pid, hand] of Object.entries(pr.playerHands)) {
         const busted = hand.status === "busted";
         const result = calculateScore(hand.numberCards, hand.modifiers, busted);
+        // Merge cancelled cards back so getEffectiveDealtCards counts them
+        const cancelledNumbers = (hand.cancelledCards || []).filter(c => c.type === "number").map(c => c.value);
+        const cancelledModifiers = (hand.cancelledCards || []).filter(c => c.type === "modifier").map(c => c.value);
+        const cancelledActions = (hand.cancelledCards || []).filter(c => c.type === "action").map(c => c.value);
         playerResults[pid] = {
-          numberCards: hand.numberCards,
-          modifiers: hand.modifiers,
-          actions: hand.actions,
+          numberCards: [...hand.numberCards, ...cancelledNumbers],
+          modifiers: [...hand.modifiers, ...cancelledModifiers],
+          actions: [...hand.actions, ...cancelledActions],
           busted,
           score: result.total,
           flip7: result.flip7,
