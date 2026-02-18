@@ -67,6 +67,22 @@ export function GameProvider({ children }) {
         (r.actions || []).forEach(a => { dealt.actions[a] = (dealt.actions[a] || 0) + 1; });
       });
     }
+
+    // Include cards from the active play round
+    if (state.game.playRound) {
+      Object.values(state.game.playRound.playerHands).forEach(hand => {
+        (hand.numberCards || []).forEach(c => { dealt.numbers[c] = (dealt.numbers[c] || 0) + 1; });
+        (hand.modifiers || []).forEach(m => { dealt.modifiers[m] = (dealt.modifiers[m] || 0) + 1; });
+        (hand.actions || []).forEach(a => { dealt.actions[a] = (dealt.actions[a] || 0) + 1; });
+        // Count cancelled cards too (e.g. Second Chance bust cards) — they were dealt from the deck
+        (hand.cancelledCards || []).forEach(c => {
+          if (c.type === "number") dealt.numbers[c.value] = (dealt.numbers[c.value] || 0) + 1;
+          else if (c.type === "modifier") dealt.modifiers[c.value] = (dealt.modifiers[c.value] || 0) + 1;
+          else if (c.type === "action") dealt.actions[c.value] = (dealt.actions[c.value] || 0) + 1;
+        });
+      });
+    }
+
     return dealt;
   }, [state.game]);
 
