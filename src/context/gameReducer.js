@@ -336,22 +336,12 @@ export function gameReducer(state, action) {
         };
       });
 
-      // Deal 1 card to each player (initial deal uses legacy auto-resolve for Flip Three)
+      // Ensure deck is ready (no initial deal — players must hit to draw)
       let deck = game.deck && game.deck.length > 0 ? [...game.deck] : createShuffledDeck();
       let dealLog = [];
       let reshuffled = false;
 
-      for (const pid of turnOrder) {
-        const result = dealCardsInitial(deck, playerHands[pid], pid, dealLog, 1);
-        deck = result.deck;
-        playerHands[pid] = result.hand;
-        dealLog = result.dealLog;
-        if (result.reshuffled) reshuffled = true;
-      }
-
-      // Find first player who is still "playing"
-      let turnIndex = turnOrder.findIndex(pid => playerHands[pid].status === "playing");
-      if (turnIndex === -1) turnIndex = 0;
+      let turnIndex = 0;
 
       return {
         ...state,
