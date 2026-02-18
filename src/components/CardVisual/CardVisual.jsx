@@ -1,6 +1,6 @@
 import styles from "./CardVisual.module.css";
 
-export default function CardVisual({ type, value, small, dimmed, highlight }) {
+export default function CardVisual({ type, value, small, dimmed, highlight, cancelled }) {
   const typeClass = type === "modifier" ? styles.modifier
     : type === "action" ? styles.action
     : styles.number;
@@ -11,7 +11,7 @@ export default function CardVisual({ type, value, small, dimmed, highlight }) {
 
   return (
     <div
-      className={`${styles.card} ${typeClass} ${small ? styles.small : ""} ${dimmed ? styles.dimmed : ""} ${highlight ? styles.highlight : ""}`}
+      className={`${styles.card} ${typeClass} ${small ? styles.small : ""} ${dimmed ? styles.dimmed : ""} ${highlight ? styles.highlight : ""} ${cancelled ? styles.cancelled : ""}`}
       style={bgStyle}
     >
       {value}

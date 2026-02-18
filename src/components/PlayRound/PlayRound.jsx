@@ -32,12 +32,16 @@ export default function PlayRound() {
   const getPlayerName = (pid) => game.players.find(p => p.id === pid)?.name || "?";
 
   // Build allPlayerData for bust calc (matches deckUtils shape)
+  // Include cancelled cards so remaining-card counts stay accurate
   const allPlayerData = {};
   for (const [pid, hand] of Object.entries(pr.playerHands)) {
+    const cancelledNumbers = (hand.cancelledCards || []).filter(c => c.type === "number").map(c => c.value);
+    const cancelledModifiers = (hand.cancelledCards || []).filter(c => c.type === "modifier").map(c => c.value);
+    const cancelledActions = (hand.cancelledCards || []).filter(c => c.type === "action").map(c => c.value);
     allPlayerData[pid] = {
-      numberCards: hand.numberCards,
-      modifiers: hand.modifiers,
-      actions: hand.actions,
+      numberCards: [...hand.numberCards, ...cancelledNumbers],
+      modifiers: [...hand.modifiers, ...cancelledModifiers],
+      actions: [...hand.actions, ...cancelledActions],
     };
   }
 
@@ -176,7 +180,10 @@ export default function PlayRound() {
               {hand.actions.map((a, i) => (
                 <CardVisual key={`a-${i}`} type="action" value={a} dimmed={busted} />
               ))}
-              {hand.numberCards.length === 0 && hand.modifiers.length === 0 && hand.actions.length === 0 && (
+              {(hand.cancelledCards || []).map((c, i) => (
+                <CardVisual key={`x-${i}`} type={c.type} value={c.value} cancelled />
+              ))}
+              {hand.numberCards.length === 0 && hand.modifiers.length === 0 && hand.actions.length === 0 && !(hand.cancelledCards || []).length && (
                 <div className={styles.noCards}>No cards</div>
               )}
             </div>

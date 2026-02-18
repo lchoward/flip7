@@ -59,6 +59,29 @@
   box-shadow: 0 0 0 2px var(--accent2), 0 2px 8px rgba(0,0,0,0.2);
 }
 
+.cancelled {
+  opacity: 0.4;
+  position: relative;
+  overflow: hidden;
+}
+
+.cancelled::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    to top right,
+    transparent calc(50% - 1.5px),
+    rgba(255, 255, 255, 0.7) calc(50% - 1.5px),
+    rgba(255, 255, 255, 0.7) calc(50% + 1.5px),
+    transparent calc(50% + 1.5px)
+  );
+  pointer-events: none;
+}
+
 @keyframes cardIn {
   from {
     opacity: 0;
