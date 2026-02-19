@@ -294,11 +294,9 @@ export default function PlayRound() {
                 <div className={`${styles.playerScore} ${busted ? styles.bustScore : ""}`}>
                   {busted ? 0 : result.total}
                 </div>
-                {(preRoundTotal > 0 || projectedTotal > 0) && (
-                  <div className={styles.scoreTotals}>
-                    {preRoundTotal} <span className={styles.arrow}>→</span> {projectedTotal}
-                  </div>
-                )}
+                <div className={styles.scoreTotals}>
+                  {preRoundTotal} <span className={styles.arrow}>→</span> {projectedTotal}
+                </div>
               </div>
             </div>
 
