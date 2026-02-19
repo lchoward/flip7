@@ -1,5 +1,5 @@
 import { newGame } from "../utils/helpers";
-import { createShuffledDeck } from "../utils/deckBuilder";
+import { buildDeck, shuffleDeck, createShuffledDeck } from "../utils/deckBuilder";
 import { calculateScore, hasDuplicateNumbers } from "../utils/scoring";
 
 export const ACTIONS = {
@@ -35,9 +35,45 @@ export const initialState = {
   loading: true,
 };
 
-function ensureDeck(deck) {
+function collectDealtCards(playerHands) {
+  const dealt = [];
+  for (const hand of Object.values(playerHands)) {
+    for (const val of hand.numberCards) {
+      dealt.push({ type: "number", value: val });
+    }
+    for (const val of hand.modifiers) {
+      dealt.push({ type: "modifier", value: val });
+    }
+    for (const val of hand.actions) {
+      dealt.push({ type: "action", value: val });
+    }
+    for (const card of (hand.cancelledCards || [])) {
+      dealt.push(card);
+    }
+  }
+  return dealt;
+}
+
+function ensureDeck(deck, playerHands) {
   if (deck.length > 0) return { deck, reshuffled: false };
-  return { deck: createShuffledDeck(), reshuffled: true };
+
+  // No active round — full reshuffle
+  if (!playerHands) {
+    return { deck: createShuffledDeck(), reshuffled: true };
+  }
+
+  // Mid-round reshuffle: exclude cards already dealt to players
+  const fullDeck = buildDeck();
+  const dealtCards = collectDealtCards(playerHands);
+  const remaining = [...fullDeck];
+  for (const dealt of dealtCards) {
+    const idx = remaining.findIndex(c => c.type === dealt.type && c.value === dealt.value);
+    if (idx !== -1) {
+      remaining.splice(idx, 1);
+    }
+  }
+
+  return { deck: shuffleDeck(remaining), reshuffled: true };
 }
 
 function findNextPlayingIndex(turnOrder, playerHands, afterIndex) {
@@ -49,8 +85,8 @@ function findNextPlayingIndex(turnOrder, playerHands, afterIndex) {
 }
 
 // Deals exactly one card. Returns pendingType to signal if UI interaction is needed.
-function dealOneCard(deck, hand, playerId, dealLog) {
-  const { deck: newDeck, reshuffled } = ensureDeck(deck);
+function dealOneCard(deck, hand, playerId, dealLog, playerHands) {
+  const { deck: newDeck, reshuffled } = ensureDeck(deck, playerHands);
   const [card, ...rest] = newDeck;
   const newHand = { ...hand };
   const newLog = [...dealLog];
@@ -119,7 +155,7 @@ function dealOneFlipThreeCard(deck, playerHands, targetPlayerId, dealLog) {
     return { deck, playerHands: currentHands, dealLog, reshuffled: false, flipThreeQueue, stopped: true };
   }
 
-  const result = dealOneCard(deck, currentHand, targetPlayerId, dealLog);
+  const result = dealOneCard(deck, currentHand, targetPlayerId, dealLog, currentHands);
   currentHand = result.hand;
 
   let stopped = false;
@@ -305,7 +341,7 @@ export function gameReducer(state, action) {
       const playerId = pr.turnOrder[pr.turnIndex];
       const hand = { ...pr.playerHands[playerId] };
 
-      const result = dealOneCard([...game.deck], hand, playerId, [...pr.dealLog]);
+      const result = dealOneCard([...game.deck], hand, playerId, [...pr.dealLog], pr.playerHands);
       const newHands = { ...pr.playerHands, [playerId]: result.hand };
 
       // Check if a pending action is needed
