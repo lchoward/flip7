@@ -4,6 +4,7 @@ import { ACTIONS } from "../../context/gameReducer";
 import { calculateScore } from "../../utils/scoring";
 import { calculateBustChance } from "../../utils/bustCalculator";
 import { decideAction, chooseFlipThreeTarget, chooseSecondChanceTarget } from "../../utils/computerStrategy";
+import { getPlayerTotal } from "../../utils/helpers";
 import CardVisual from "../CardVisual/CardVisual";
 import DeckTracker from "../DeckTracker/DeckTracker";
 import styles from "./PlayRound.module.css";
@@ -268,6 +269,8 @@ export default function PlayRound() {
         const busted = hand.status === "busted";
         const stood = hand.status === "stood" || hand.status === "frozen";
         const result = calculateScore(hand.numberCards, hand.modifiers, busted);
+        const preRoundTotal = getPlayerTotal(game, pid);
+        const projectedTotal = preRoundTotal + (busted ? 0 : result.total);
 
         // Find duplicate numbers for highlighting
         const numCounts = {};
@@ -287,8 +290,15 @@ export default function PlayRound() {
                 {hand.status === "busted" && <span className={`${styles.statusBadge} ${styles.bustBadge}`}>BUST</span>}
                 {isActive && <span className={`${styles.statusBadge} ${styles.activeBadge}`}>ACTIVE</span>}
               </div>
-              <div className={`${styles.playerScore} ${busted ? styles.bustScore : ""}`}>
-                {busted ? 0 : result.total}
+              <div className={styles.scoreColumn}>
+                <div className={`${styles.playerScore} ${busted ? styles.bustScore : ""}`}>
+                  {busted ? 0 : result.total}
+                </div>
+                {(preRoundTotal > 0 || projectedTotal > 0) && (
+                  <div className={styles.scoreTotals}>
+                    {preRoundTotal} <span className={styles.arrow}>→</span> {projectedTotal}
+                  </div>
+                )}
               </div>
             </div>
 
