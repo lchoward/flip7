@@ -1,0 +1,637 @@
+.overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.85);
+  z-index: 100;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  animation: fadeIn 0.25s ease-out;
+}
+
+.closeBtn {
+  position: absolute;
+  top: 16px;
+  right: 16px;
+  background: none;
+  border: none;
+  color: var(--text-dim);
+  font-size: 28px;
+  cursor: pointer;
+  padding: 4px 8px;
+  line-height: 1;
+  z-index: 2;
+}
+
+.closeBtn:hover {
+  color: var(--text);
+}
+
+.carousel {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+  max-width: 400px;
+  padding: 0 20px;
+}
+
+.slide {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: 20px;
+  width: 100%;
+}
+
+.slideSubtitle {
+  font-family: 'Fredoka', sans-serif;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--primary);
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  margin-bottom: -12px;
+}
+
+.slideTitle {
+  font-family: 'Fredoka', sans-serif;
+  font-size: 26px;
+  font-weight: 700;
+  color: var(--text);
+}
+
+.slideText {
+  font-size: 15px;
+  color: var(--text-dim);
+  line-height: 1.5;
+  max-width: 320px;
+}
+
+.visual {
+  min-height: 140px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  position: relative;
+}
+
+/* Bullet list for action cards */
+.bulletList {
+  list-style: none;
+  padding: 0;
+  text-align: left;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.bulletList li {
+  font-size: 14px;
+  color: var(--text-dim);
+  line-height: 1.5;
+}
+
+.bulletList li::before {
+  content: "\2022";
+  color: var(--primary);
+  font-weight: 700;
+  margin-right: 8px;
+}
+
+.bulletList strong {
+  color: var(--text);
+}
+
+/* Navigation */
+.nav {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  margin-top: 32px;
+}
+
+.navBtn {
+  background: var(--surface2);
+  border: none;
+  color: var(--text);
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  font-size: 20px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background 0.2s;
+}
+
+.navBtn:hover {
+  background: var(--primary-dim);
+}
+
+.navBtn:disabled {
+  opacity: 0.3;
+  cursor: default;
+}
+
+.navBtn:disabled:hover {
+  background: var(--surface2);
+}
+
+.dots {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+.dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 4px;
+  background: var(--surface2);
+  border: none;
+  padding: 0;
+  cursor: pointer;
+  transition: all 0.3s;
+}
+
+.dotActive {
+  width: 24px;
+  background: var(--primary);
+}
+
+/* Mini cards shared style */
+.miniCard {
+  width: 44px;
+  height: 62px;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: 'Fredoka', sans-serif;
+  font-weight: 700;
+  font-size: 18px;
+  color: #fff;
+  box-shadow: 0 3px 12px rgba(0, 0, 0, 0.3);
+  flex-shrink: 0;
+}
+
+.miniCardSmall {
+  width: 36px;
+  height: 50px;
+  font-size: 14px;
+  border-radius: 6px;
+}
+
+.modifierCard {
+  background: linear-gradient(135deg, #f0a030, #e08820);
+}
+
+.actionCard {
+  background: linear-gradient(135deg, #9b59b6, #8e44ad);
+}
+
+/* ======= Slide 1: Race to 200 ======= */
+.progressArea {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  width: 100%;
+}
+
+.progressTrack {
+  width: 100%;
+  max-width: 280px;
+  height: 28px;
+  background: var(--surface2);
+  border-radius: 14px;
+  position: relative;
+  overflow: hidden;
+}
+
+.progressFill {
+  height: 100%;
+  border-radius: 14px;
+  background: linear-gradient(90deg, var(--primary), var(--accent));
+  animation: fillBar 2s ease-out forwards;
+  width: 0;
+}
+
+.milestones {
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+  max-width: 280px;
+  margin-top: 8px;
+  font-family: 'Fredoka', sans-serif;
+  font-size: 13px;
+  color: var(--text-dim);
+}
+
+.milestone200 {
+  color: var(--primary);
+  font-weight: 700;
+  animation: glowPulse 1s ease-in-out 2s infinite alternate;
+}
+
+@keyframes fillBar {
+  0% { width: 0; }
+  100% { width: 100%; }
+}
+
+@keyframes glowPulse {
+  from { text-shadow: 0 0 4px rgba(0, 212, 170, 0.3); }
+  to { text-shadow: 0 0 12px rgba(0, 212, 170, 0.8); }
+}
+
+/* ======= Slide 2: Hit or Stand ======= */
+.dealArea {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+}
+
+.cardRow {
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+}
+
+.dealIn {
+  opacity: 0;
+  animation: dealCard 0.4s ease-out forwards;
+}
+
+.mockButtons {
+  display: flex;
+  gap: 12px;
+}
+
+.mockBtn {
+  font-family: 'Fredoka', sans-serif;
+  font-size: 13px;
+  font-weight: 600;
+  padding: 6px 20px;
+  border-radius: 50px;
+  border: none;
+  cursor: default;
+}
+
+.mockHit {
+  background: linear-gradient(135deg, var(--primary), var(--primary-dim));
+  color: var(--bg);
+}
+
+.mockStand {
+  background: var(--surface2);
+  color: var(--text);
+  border: 2px solid var(--surface2);
+}
+
+@keyframes dealCard {
+  0% {
+    opacity: 0;
+    transform: scale(0.5) translateY(-20px);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1) translateY(0);
+  }
+}
+
+/* ======= Slide 3: Stand ======= */
+.standPulse {
+  animation: standGlow 1s ease-in-out 0.5s infinite alternate;
+  border: 2px solid var(--primary) !important;
+  color: var(--primary) !important;
+}
+
+.scoreLockedArea {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  opacity: 0;
+  animation: fadeSlideIn 0.4s ease-out 0.8s forwards;
+}
+
+.scoreLocked {
+  font-family: 'Fredoka', sans-serif;
+  font-size: 28px;
+  font-weight: 700;
+  color: var(--primary);
+}
+
+.lockIcon {
+  font-size: 13px;
+  color: var(--text-dim);
+}
+
+@keyframes standGlow {
+  from { box-shadow: 0 0 4px rgba(0, 212, 170, 0.2); }
+  to { box-shadow: 0 0 16px rgba(0, 212, 170, 0.5); }
+}
+
+/* ======= Slide 4: Hit ======= */
+.scoreTransition {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-family: 'Fredoka', sans-serif;
+}
+
+.scoreOld {
+  font-size: 22px;
+  font-weight: 600;
+  color: var(--text-dim);
+}
+
+.scoreArrow {
+  font-size: 16px;
+  color: var(--text-dim);
+}
+
+.scoreNew {
+  font-size: 28px;
+  font-weight: 700;
+  color: var(--primary);
+  opacity: 0;
+  animation: scorePop 0.4s ease-out 1s forwards;
+}
+
+@keyframes scorePop {
+  0% { opacity: 0; transform: scale(0.7); }
+  60% { opacity: 1; transform: scale(1.15); }
+  100% { opacity: 1; transform: scale(1); }
+}
+
+/* ======= Slide 5: Avoid Duplicates ======= */
+.bustArea {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+}
+
+.bustHand {
+  display: flex;
+  gap: 10px;
+  position: relative;
+}
+
+.bustDim {
+  animation: dimHand 0.3s ease-out 1.8s forwards;
+}
+
+.dupeCard {
+  animation: dealCard 0.4s ease-out 1.2s forwards, bustShake 0.4s ease-out 1.6s;
+  opacity: 0;
+}
+
+.dupeHighlight {
+  box-shadow: 0 0 0 3px var(--accent2), 0 3px 12px rgba(0, 0, 0, 0.3) !important;
+}
+
+.bustScoreRow {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+}
+
+.bustBadge {
+  font-family: 'Fredoka', sans-serif;
+  font-size: 22px;
+  font-weight: 700;
+  color: var(--accent2);
+  opacity: 0;
+  animation: bustBadgePop 0.3s ease-out 2s forwards;
+}
+
+.bustScoreZero {
+  font-family: 'Fredoka', sans-serif;
+  font-size: 28px;
+  font-weight: 700;
+  color: var(--accent2);
+  opacity: 0;
+  animation: scorePop 0.4s ease-out 2.2s forwards;
+}
+
+.bustScoreRow .scoreOld {
+  opacity: 0;
+  animation: fadeSlideIn 0.3s ease-out 2s forwards;
+}
+
+.bustScoreRow .scoreArrow {
+  opacity: 0;
+  animation: fadeSlideIn 0.3s ease-out 2s forwards;
+}
+
+.bustScoreRow .scoreTransition {
+  opacity: 0;
+  animation: fadeSlideIn 0.3s ease-out 2s forwards;
+}
+
+@keyframes bustShake {
+  0%, 100% { transform: translateX(0); }
+  20% { transform: translateX(-6px); }
+  40% { transform: translateX(6px); }
+  60% { transform: translateX(-4px); }
+  80% { transform: translateX(4px); }
+}
+
+@keyframes bustBadgePop {
+  0% { opacity: 0; transform: scale(0.5); }
+  100% { opacity: 1; transform: scale(1); }
+}
+
+@keyframes dimHand {
+  to { opacity: 0.4; }
+}
+
+/* ======= Slide 6: Flip 7 ======= */
+.flip7Area {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 14px;
+}
+
+.cardArc {
+  display: flex;
+  gap: 4px;
+  justify-content: center;
+}
+
+.arcCard {
+  opacity: 0;
+  animation: dealCard 0.35s ease-out forwards;
+}
+
+.flip7Badge {
+  font-family: 'Fredoka', sans-serif;
+  font-size: 20px;
+  font-weight: 700;
+  background: linear-gradient(135deg, var(--primary), var(--accent));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  opacity: 0;
+  animation: bustBadgePop 0.4s ease-out 2.6s forwards;
+}
+
+.flip7Score {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-family: 'Fredoka', sans-serif;
+  opacity: 0;
+  animation: fadeSlideIn 0.4s ease-out 3s forwards;
+}
+
+.flip7Score .scoreOld {
+  font-size: 20px;
+}
+
+.flip7Score .scoreArrow {
+  font-size: 14px;
+}
+
+.flip7Score .scoreNew {
+  opacity: 1;
+  animation: none;
+}
+
+/* ======= Slide 7: Action Cards ======= */
+.actionArea {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+  max-width: 300px;
+}
+
+.actionItem {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  opacity: 0;
+  animation: dealCard 0.4s ease-out forwards;
+  flex: 1;
+}
+
+.actionLabel {
+  font-size: 12px;
+  color: var(--text-dim);
+  line-height: 1.3;
+}
+
+/* ======= Slide 8: Boost Your Score ======= */
+.scoreArea {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 14px;
+}
+
+.scorePlus {
+  font-family: 'Fredoka', sans-serif;
+  font-size: 16px;
+  color: var(--text-dim);
+}
+
+.slideInCard {
+  opacity: 0;
+  animation: slideIn 0.4s ease-out forwards;
+}
+
+.scoreDisplay {
+  font-family: 'Fredoka', sans-serif;
+  font-size: 28px;
+  font-weight: 700;
+  color: var(--text);
+  min-width: 40px;
+}
+
+.scoreChange {
+  animation: scoreChange 0.3s ease-out;
+}
+
+.scoreStep {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  opacity: 0;
+  animation: fadeSlideIn 0.4s ease-out forwards;
+}
+
+.scoreStep .scoreDisplay {
+  font-size: 22px;
+}
+
+.scoreFormula {
+  font-family: 'Fredoka', sans-serif;
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--text-dim);
+}
+
+@keyframes slideIn {
+  0% {
+    opacity: 0;
+    transform: translateX(-20px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateX(0);
+  }
+}
+
+@keyframes scoreChange {
+  0% { transform: scale(1); }
+  50% { transform: scale(1.3); }
+  100% { transform: scale(1); }
+}
+
+@keyframes fadeSlideIn {
+  0% {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+/* Responsive */
+@media (max-width: 400px) {
+  .slideTitle {
+    font-size: 22px;
+  }
+
+  .slideText {
+    font-size: 14px;
+  }
+
+  .miniCard {
+    width: 38px;
+    height: 54px;
+    font-size: 16px;
+  }
+
+  .miniCardSmall {
+    width: 32px;
+    height: 44px;
+    font-size: 12px;
+  }
+}

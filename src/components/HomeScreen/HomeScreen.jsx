@@ -1,11 +1,13 @@
-import { useEffect } from "react";
+import { useState, useEffect } from "react";
 import { useGame } from "../../context/GameContext";
 import { ACTIONS } from "../../context/gameReducer";
 import ConfirmDialog from "../ConfirmDialog/ConfirmDialog";
+import HowToPlay from "../HowToPlay/HowToPlay";
 import styles from "./HomeScreen.module.css";
 
 export default function HomeScreen() {
   const { game, dialog, dispatch } = useGame();
+  const [showHowToPlay, setShowHowToPlay] = useState(false);
 
   const startNewGame = () => {
     dispatch({ type: ACTIONS.START_NEW_GAME });
@@ -30,14 +32,14 @@ export default function HomeScreen() {
   // Keyboard shortcut: Enter = New Game
   useEffect(() => {
     const handleKey = (e) => {
-      if (dialog) return;
+      if (dialog || showHowToPlay) return;
       if (e.key === "Enter") {
         confirmNewGame();
       }
     };
     window.addEventListener("keydown", handleKey);
     return () => window.removeEventListener("keydown", handleKey);
-  }, [dialog, game]);
+  }, [dialog, game, showHowToPlay]);
 
   return (
     <>
@@ -59,9 +61,11 @@ export default function HomeScreen() {
               Continue Game
             </button>
           )}
+          <button className="btn btn-ghost" onClick={() => setShowHowToPlay(true)}>How to Play</button>
         </div>
       </div>
       {dialog && <ConfirmDialog {...dialog} />}
+      {showHowToPlay && <HowToPlay onClose={() => setShowHowToPlay(false)} />}
     </>
   );
 }
