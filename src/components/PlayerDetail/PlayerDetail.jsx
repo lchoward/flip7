@@ -35,7 +35,7 @@ export default function PlayerDetail() {
           <div
             key={i}
             className={styles.roundHistoryItem}
-            onClick={() => dispatch({ type: ACTIONS.NAVIGATE, payload: { screen: "round", editingRound: i, playerId: player.id } })}
+            onClick={() => dispatch({ type: ACTIONS.NAVIGATE, payload: { screen: "roundDetail", editingRound: i, playerId: player.id } })}
           >
             <div>
               <div className={styles.round}>Round {i + 1}</div>

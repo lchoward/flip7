@@ -100,6 +100,8 @@ export function gameReducer(state, action) {
           return { ...state, screen: "game", selectedPlayer: null, editingRound: null };
         case "round":
           return { ...state, screen: "round", editingRound: editingRound ?? null, selectedPlayer: playerId ?? state.selectedPlayer };
+        case "roundDetail":
+          return { ...state, screen: "roundDetail", editingRound: editingRound ?? null, selectedPlayer: playerId ?? state.selectedPlayer };
         case "detail":
           return { ...state, screen: "detail", selectedPlayer: playerId };
         default:
