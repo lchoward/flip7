@@ -3,9 +3,11 @@ import { useGame } from "../../context/GameContext";
 import { ACTIONS } from "../../context/gameReducer";
 import { calculateScore } from "../../utils/scoring";
 import { calculateBustChance } from "../../utils/bustCalculator";
+import { flattenHandWithCancelled } from "../../utils/handUtils";
 import { decideAction, chooseFlipThreeTarget, chooseSecondChanceTarget } from "../../utils/computerStrategy";
 import { getPlayerTotal } from "../../utils/helpers";
 import CardVisual from "../CardVisual/CardVisual";
+import BustChanceBanner from "../BustChanceBanner/BustChanceBanner";
 import DeckTracker from "../DeckTracker/DeckTracker";
 import styles from "./PlayRound.module.css";
 
@@ -98,20 +100,9 @@ export default function PlayRound() {
         playerId: activePid,
         hand,
         dealt: getEffectiveDealtCards(),
-        allPlayerData: (() => {
-          const data = {};
-          for (const [pid, h] of Object.entries(pr.playerHands)) {
-            const cancelledNumbers = (h.cancelledCards || []).filter(c => c.type === "number").map(c => c.value);
-            const cancelledModifiers = (h.cancelledCards || []).filter(c => c.type === "modifier").map(c => c.value);
-            const cancelledActions = (h.cancelledCards || []).filter(c => c.type === "action").map(c => c.value);
-            data[pid] = {
-              numberCards: [...h.numberCards, ...cancelledNumbers],
-              modifiers: [...h.modifiers, ...cancelledModifiers],
-              actions: [...h.actions, ...cancelledActions],
-            };
-          }
-          return data;
-        })(),
+        allPlayerData: Object.fromEntries(
+          Object.entries(pr.playerHands).map(([pid, h]) => [pid, flattenHandWithCancelled(h)])
+        ),
         game,
       });
       if (action === "hit") {
@@ -133,19 +124,10 @@ export default function PlayRound() {
   const getPlayerName = (pid) => game.players.find(p => p.id === pid)?.name || "?";
   const isComputerPlayer = (pid) => game.players.find(p => p.id === pid)?.isComputer === true;
 
-  // Build allPlayerData for bust calc (matches deckUtils shape)
-  // Include cancelled cards so remaining-card counts stay accurate
-  const allPlayerData = {};
-  for (const [pid, hand] of Object.entries(pr.playerHands)) {
-    const cancelledNumbers = (hand.cancelledCards || []).filter(c => c.type === "number").map(c => c.value);
-    const cancelledModifiers = (hand.cancelledCards || []).filter(c => c.type === "modifier").map(c => c.value);
-    const cancelledActions = (hand.cancelledCards || []).filter(c => c.type === "action").map(c => c.value);
-    allPlayerData[pid] = {
-      numberCards: [...hand.numberCards, ...cancelledNumbers],
-      modifiers: [...hand.modifiers, ...cancelledModifiers],
-      actions: [...hand.actions, ...cancelledActions],
-    };
-  }
+  // Build allPlayerData for bust calc (includes cancelled cards for accurate remaining-card counts)
+  const allPlayerData = Object.fromEntries(
+    Object.entries(pr.playerHands).map(([pid, hand]) => [pid, flattenHandWithCancelled(hand)])
+  );
 
   const dealt = getEffectiveDealtCards();
 
@@ -155,7 +137,7 @@ export default function PlayRound() {
       <div className={styles.header}>
         <h2>Round {game.rounds.length + 1}</h2>
         <button
-          className={`${styles.cheaterToggle} ${cheaterMode ? styles.cheaterActive : ""}`}
+          className={`cheaterToggle ${cheaterMode ? "cheaterActive" : ""}`}
           onClick={() => dispatch({ type: ACTIONS.TOGGLE_CHEATER })}
         >
           {cheaterMode ? "Cheater: ON" : "Cheater: OFF"}
@@ -167,7 +149,7 @@ export default function PlayRound() {
       </div>
 
       {game.tiebreaker && (
-        <div className={styles.tiebreakerBanner}>
+        <div className="tiebreakerBanner">
           Tiebreaker Round — {game.tiebreaker.playerIds.map(pid => getPlayerName(pid)).join(" vs ")}
         </div>
       )}
@@ -284,7 +266,7 @@ export default function PlayRound() {
             <div className={styles.playerHeader}>
               <div className={styles.playerName}>
                 {getPlayerName(pid)}
-                {isComputerPlayer(pid) && <span className={styles.cpuBadge}>CPU</span>}
+                {isComputerPlayer(pid) && <span className="cpuBadge">CPU</span>}
                 {hand.status === "frozen" && <span className={styles.statusBadge}>FROZEN</span>}
                 {hand.status === "stood" && <span className={styles.statusBadge}>STOOD</span>}
                 {hand.status === "busted" && <span className={`${styles.statusBadge} ${styles.bustBadge}`}>BUST</span>}
@@ -336,24 +318,9 @@ export default function PlayRound() {
               <div className={styles.flip7Badge}>FLIP 7!</div>
             )}
 
-            {cheaterMode && hand.status === "playing" && hand.numberCards.length > 0 && dealt && (() => {
-              const { bustChance, bustCards, totalRemaining } = calculateBustChance(
-                hand.numberCards, dealt, allPlayerData
-              );
-              return (
-                <div className={`${styles.bustChanceBanner} ${
-                  bustChance >= 75 ? styles.bustDanger :
-                  bustChance >= 50 ? styles.bustWarning :
-                  bustChance >= 25 ? styles.bustCaution :
-                  styles.bustSafe
-                }`}>
-                  <span className={styles.bustChanceValue}>{bustChance.toFixed(1)}%</span>
-                  <span className={styles.bustChanceLabel}>
-                    bust ({bustCards}/{totalRemaining})
-                  </span>
-                </div>
-              );
-            })()}
+            {cheaterMode && hand.status === "playing" && hand.numberCards.length > 0 && dealt && (
+              <BustChanceBanner {...calculateBustChance(hand.numberCards, dealt, allPlayerData)} />
+            )}
 
             {isActive && isComputerPlayer(pid) && (
               <div className={styles.cpuThinking}>

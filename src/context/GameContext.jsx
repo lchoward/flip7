@@ -2,7 +2,8 @@ import { createContext, useContext, useReducer, useEffect, useMemo, useCallback 
 import { gameReducer, initialState, ACTIONS } from "./gameReducer";
 import { loadGame, persistGame } from "./storage";
 import { getPlayerTotal } from "../utils/helpers";
-import { DECK, WIN_SCORE } from "../constants/deck";
+import { createEmptyDealtCards } from "../utils/deckUtils";
+import { WIN_SCORE } from "../constants/deck";
 
 const GameContext = createContext(null);
 
@@ -55,10 +56,7 @@ export function GameProvider({ children }) {
   const getEffectiveDealtCards = useCallback(() => {
     if (!state.game) return null;
     const startRound = state.game.lastReshuffle || 0;
-    const dealt = { numbers: {}, modifiers: {}, actions: {} };
-    for (let i = 0; i <= 12; i++) dealt.numbers[i] = 0;
-    Object.keys(DECK.modifiers).forEach(k => dealt.modifiers[k] = 0);
-    Object.keys(DECK.actions).forEach(k => dealt.actions[k] = 0);
+    const dealt = createEmptyDealtCards();
 
     for (let i = startRound; i < state.game.rounds.length; i++) {
       Object.values(state.game.rounds[i].playerResults).forEach(r => {

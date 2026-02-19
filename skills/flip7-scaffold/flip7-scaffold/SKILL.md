@@ -32,9 +32,9 @@ Every component in this project follows a recognizable shape:
 
 2. **Export style**: Use `export default function ComponentName()` — not arrow functions, not separate export statements.
 
-3. **Context access**: Components that need game state use `const { game, dispatch, ... } = useGame()`. The available properties from context are: `game`, `screen`, `selectedPlayer`, `editingRound`, `dialog`, `deckOpen`, `loading`, `dispatch`, `sortedPlayers`, `winner`, `getEffectiveDealtCards`.
+3. **Context access**: Components that need game state use `const { game, dispatch, ... } = useGame()`. The available properties from context are: `game`, `screen`, `selectedPlayer`, `editingRound`, `deckOpen`, `loading`, `dispatch`, `sortedPlayers`, `winner`, `getEffectiveDealtCards`.
 
-4. **Navigation**: Screen changes go through `dispatch({ type: ACTIONS.NAVIGATE, payload: "screenName" })`. The detail screen also passes `playerId`, and the round screen can pass `editingRound`.
+4. **Navigation**: Screen changes go through `dispatch({ type: ACTIONS.NAVIGATE, payload: { screen: "screenName" } })`. The detail screen also passes `playerId`, and the round screen can pass `editingRound` in the same payload object.
 
 5. **Wrapper structure**: Screen-level components wrap their content in `<div className="app fade-in">`. Sub-components don't need this wrapper.
 

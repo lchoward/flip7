@@ -1,5 +1,5 @@
 import { describe, it, expect } from "vitest";
-import { uid, newGame, getPlayerTotal, getDealtCards, getDeckStatus } from "./helpers";
+import { uid, newGame, getPlayerTotal } from "./helpers";
 
 describe("uid", () => {
   it("returns a string", () => {
@@ -77,77 +77,5 @@ describe("getPlayerTotal", () => {
       ],
     };
     expect(getPlayerTotal(game, "p2")).toBe(0);
-  });
-});
-
-describe("getDealtCards", () => {
-  it("returns empty counts for no rounds", () => {
-    const game = { rounds: [] };
-    const dealt = getDealtCards(game);
-    expect(Object.values(dealt.numbers).every(v => v === 0)).toBe(true);
-    expect(Object.values(dealt.modifiers).every(v => v === 0)).toBe(true);
-    expect(Object.values(dealt.actions).every(v => v === 0)).toBe(true);
-  });
-
-  it("counts cards from single round", () => {
-    const game = {
-      rounds: [{
-        playerResults: {
-          p1: { numberCards: [3, 5], modifiers: ["+4"], actions: ["Freeze"] },
-          p2: { numberCards: [7], modifiers: [], actions: [] },
-        },
-      }],
-    };
-    const dealt = getDealtCards(game);
-    expect(dealt.numbers[3]).toBe(1);
-    expect(dealt.numbers[5]).toBe(1);
-    expect(dealt.numbers[7]).toBe(1);
-    expect(dealt.modifiers["+4"]).toBe(1);
-    expect(dealt.actions["Freeze"]).toBe(1);
-  });
-
-  it("accumulates across multiple rounds", () => {
-    const game = {
-      rounds: [
-        { playerResults: { p1: { numberCards: [5], modifiers: [], actions: [] } } },
-        { playerResults: { p1: { numberCards: [5, 5], modifiers: [], actions: [] } } },
-      ],
-    };
-    const dealt = getDealtCards(game);
-    expect(dealt.numbers[5]).toBe(3);
-  });
-
-  it("handles missing arrays gracefully", () => {
-    const game = {
-      rounds: [{ playerResults: { p1: {} } }],
-    };
-    const dealt = getDealtCards(game);
-    expect(Object.values(dealt.numbers).every(v => v === 0)).toBe(true);
-  });
-});
-
-describe("getDeckStatus", () => {
-  it("returns totalDeck of 94", () => {
-    const game = { rounds: [] };
-    expect(getDeckStatus(game).totalDeck).toBe(94);
-  });
-
-  it("returns 0 dealt for no rounds", () => {
-    const game = { rounds: [] };
-    expect(getDeckStatus(game).totalDealt).toBe(0);
-    expect(getDeckStatus(game).remaining).toBe(94);
-  });
-
-  it("calculates remaining correctly", () => {
-    const game = {
-      rounds: [{
-        playerResults: {
-          p1: { numberCards: [3, 5], modifiers: ["+4"], actions: [] },
-        },
-      }],
-    };
-    const status = getDeckStatus(game);
-    expect(status.totalDealt).toBe(3);
-    expect(status.remaining).toBe(91);
   });
 });

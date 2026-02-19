@@ -1,46 +1,45 @@
+import { useState } from "react";
 import { useGame } from "../../context/GameContext";
 import { ACTIONS } from "../../context/gameReducer";
 import { getPlayerTotal } from "../../utils/helpers";
 import ConfirmDialog from "../ConfirmDialog/ConfirmDialog";
 import DeckTracker from "../DeckTracker/DeckTracker";
-import styles from "./GameScreen.module.css";
 
 export default function GameScreen() {
-  const { game, sortedPlayers, winner, deckOpen, dialog, getEffectiveDealtCards, dispatch } = useGame();
+  const { game, sortedPlayers, winner, deckOpen, getEffectiveDealtCards, dispatch } = useGame();
   const dealt = getEffectiveDealtCards();
+  const [confirmDialog, setConfirmDialog] = useState(null);
 
   const resetDeck = () => {
-    dispatch({
-      type: ACTIONS.SET_DIALOG,
-      payload: {
-        title: "Reset Deck Tracker?",
-        message: "This marks the deck as reshuffled. Card counts will reset but scores remain.",
-        onConfirm: () => {
-          dispatch({ type: ACTIONS.RESET_DECK });
-        },
-        onCancel: () => dispatch({ type: ACTIONS.SET_DIALOG, payload: null }),
+    setConfirmDialog({
+      title: "Reset Deck Tracker?",
+      message: "This marks the deck as reshuffled. Card counts will reset but scores remain.",
+      onConfirm: () => {
+        dispatch({ type: ACTIONS.RESET_DECK });
+        setConfirmDialog(null);
       },
+      onCancel: () => setConfirmDialog(null),
     });
   };
 
   return (
     <>
       <div className="app fade-in">
-        <div className={styles.gameHeader}>
-          <div className={styles.gameTitle}>FLIP 7</div>
-          <div className={styles.roundBadge}>
+        <div className="gameHeader">
+          <div className="gameTitle">FLIP 7</div>
+          <div className="roundBadge">
             {game.rounds.length === 0 ? "No rounds yet" : `Round ${game.rounds.length} complete`}
           </div>
         </div>
 
         {winner && (
-          <div className={styles.winnerBanner}>
-            <h3>🏆 {winner.name} Wins!</h3>
+          <div className="winnerBanner">
+            <h3>{winner.name} Wins!</h3>
             <p>{getPlayerTotal(game, winner.id)} points</p>
           </div>
         )}
 
-        <div className={styles.scoreboard}>
+        <div className="scoreboard">
           {sortedPlayers.map((p, i) => {
             const total = getPlayerTotal(game, p.id);
             const lastRound = game.rounds.length > 0
@@ -49,30 +48,30 @@ export default function GameScreen() {
             return (
               <div
                 key={p.id}
-                className={`${styles.playerRow} ${i === 0 && total > 0 ? styles.leader : ""}`}
-                onClick={() => dispatch({ type: ACTIONS.NAVIGATE, payload: "detail", playerId: p.id })}
+                className={`playerRow ${i === 0 && total > 0 ? "leader" : ""}`}
+                onClick={() => dispatch({ type: ACTIONS.NAVIGATE, payload: { screen: "detail", playerId: p.id } })}
               >
-                <div className={`${styles.rank} ${i === 0 && total > 0 ? styles.gold : ""}`}>{i + 1}</div>
-                <div className={styles.playerInfo}>
-                  <div className={styles.playerName}>{p.name}</div>
+                <div className={`rank ${i === 0 && total > 0 ? "gold" : ""}`}>{i + 1}</div>
+                <div className="playerInfo">
+                  <div className="scoreboardPlayerName">{p.name}</div>
                   {lastRound && (
-                    <div className={styles.playerLastRound}>
+                    <div className="playerLastRound">
                       Last: {lastRound.busted ? "Bust" : `+${lastRound.score}`}
                     </div>
                   )}
                 </div>
-                <div className={styles.playerScore}>{total}</div>
-                <div className={styles.arrowIcon}>›</div>
+                <div className="scoreboardPlayerScore">{total}</div>
+                <div className="arrowIcon">›</div>
               </div>
             );
           })}
         </div>
 
-        <div className={styles.actionBar}>
-          <button className="btn btn-primary btn-small" onClick={() => dispatch({ type: ACTIONS.NAVIGATE, payload: "round" })}>
+        <div className="actionBar">
+          <button className="btn btn-primary btn-small" onClick={() => dispatch({ type: ACTIONS.NAVIGATE, payload: { screen: "round" } })}>
             + New Round
           </button>
-          <button className="btn btn-secondary btn-small" onClick={() => dispatch({ type: ACTIONS.NAVIGATE, payload: "home" })}>Menu</button>
+          <button className="btn btn-secondary btn-small" onClick={() => dispatch({ type: ACTIONS.NAVIGATE, payload: { screen: "home" } })}>Menu</button>
         </div>
 
         <DeckTracker
@@ -83,7 +82,7 @@ export default function GameScreen() {
           onReset={resetDeck}
         />
       </div>
-      {dialog && <ConfirmDialog {...dialog} />}
+      {confirmDialog && <ConfirmDialog {...confirmDialog} />}
     </>
   );
 }

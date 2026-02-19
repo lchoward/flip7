@@ -68,9 +68,9 @@ export default function PlayGameScreen() {
   return (
     <>
       <div className="app fade-in">
-        <div className={styles.gameHeader}>
-          <div className={styles.gameTitle}>FLIP 7</div>
-          <div className={styles.roundBadge}>
+        <div className="gameHeader">
+          <div className="gameTitle">FLIP 7</div>
+          <div className="roundBadge">
             {game.rounds.length === 0 ? "Ready to play" : `Round ${game.rounds.length} complete`}
           </div>
         </div>
@@ -78,21 +78,21 @@ export default function PlayGameScreen() {
         <div className={styles.modeBadge}>Play Mode</div>
 
         {winner && (
-          <div className={styles.winnerBanner}>
+          <div className="winnerBanner">
             <h3>{winner.name} Wins!</h3>
             <p>{getPlayerTotal(game, winner.id)} points</p>
           </div>
         )}
 
         {game.tiebreaker && !winner && (
-          <div className={styles.tiebreakerBanner}>
+          <div className="tiebreakerBanner">
             Tiebreaker — {game.tiebreaker.playerIds.map(pid =>
               game.players.find(p => p.id === pid)?.name
             ).join(" vs ")}
           </div>
         )}
 
-        <div className={styles.scoreboard}>
+        <div className="scoreboard">
           {sortedPlayers.map((p, i) => {
             const total = getPlayerTotal(game, p.id);
             const isDealer = dealerPlayer?.id === p.id;
@@ -101,18 +101,18 @@ export default function PlayGameScreen() {
             return (
               <div
                 key={p.id}
-                className={`${styles.playerRow} ${i === 0 && total > 0 ? styles.leader : ""}`}
-                onClick={() => dispatch({ type: ACTIONS.NAVIGATE, payload: "detail", playerId: p.id })}
+                className={`playerRow ${i === 0 && total > 0 ? "leader" : ""}`}
+                onClick={() => dispatch({ type: ACTIONS.NAVIGATE, payload: { screen: "detail", playerId: p.id } })}
               >
-                <div className={`${styles.rank} ${i === 0 && total > 0 ? styles.gold : ""}`}>{i + 1}</div>
-                <div className={styles.playerInfo}>
-                  <div className={styles.playerName}>
+                <div className={`rank ${i === 0 && total > 0 ? "gold" : ""}`}>{i + 1}</div>
+                <div className="playerInfo">
+                  <div className="scoreboardPlayerName">
                     {p.name}
                     {isDealer && <span className={styles.dealerBadge}>D</span>}
-                    {p.isComputer && <span className={styles.cpuBadge}>CPU</span>}
+                    {p.isComputer && <span className="cpuBadge">CPU</span>}
                   </div>
                   {lastResult && (
-                    <div className={styles.playerLastRound}>
+                    <div className="playerLastRound">
                       Last: {lastResult.busted ? "Bust" : `+${lastResult.score}`}
                     </div>
                   )}
@@ -130,8 +130,8 @@ export default function PlayGameScreen() {
                     </div>
                   )}
                 </div>
-                <div className={styles.playerScore}>{total}</div>
-                <div className={styles.arrowIcon}>›</div>
+                <div className="scoreboardPlayerScore">{total}</div>
+                <div className="arrowIcon">›</div>
               </div>
             );
           })}
@@ -147,7 +147,7 @@ export default function PlayGameScreen() {
           </button>
         )}
 
-        <div className={styles.actionBar}>
+        <div className="actionBar">
           {!winner && (
             <button className="btn btn-primary btn-small" onClick={handleNewRound}>
               {game.tiebreaker ? "Tiebreaker Round" : "Deal Next Round"}
@@ -159,7 +159,7 @@ export default function PlayGameScreen() {
         <div className={styles.deckInfo}>
           {game.deck?.length || 0} cards remaining in deck
           <button
-            className={styles.cheaterToggle}
+            className="cheaterToggle"
             onClick={() => dispatch({ type: ACTIONS.TOGGLE_CHEATER })}
           >
             {cheaterMode ? "Cheater: ON" : "Cheater: OFF"}
@@ -185,7 +185,7 @@ export default function PlayGameScreen() {
           cancelLabel="Stay"
           onConfirm={() => {
             setMenuConfirm(false);
-            dispatch({ type: ACTIONS.NAVIGATE, payload: "home" });
+            dispatch({ type: ACTIONS.NAVIGATE, payload: { screen: "home" } });
           }}
           onCancel={() => setMenuConfirm(false)}
         />

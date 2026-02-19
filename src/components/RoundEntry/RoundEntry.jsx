@@ -6,6 +6,7 @@ import { calculateScore, hasDuplicateNumbers } from "../../utils/scoring";
 import { calculateBustChance } from "../../utils/bustCalculator";
 import { getRemainingCards, getTotalRemaining, getCardRemaining } from "../../utils/deckUtils";
 import ConfirmDialog from "../ConfirmDialog/ConfirmDialog";
+import BustChanceBanner from "../BustChanceBanner/BustChanceBanner";
 import styles from "./RoundEntry.module.css";
 
 export default function RoundEntry() {
@@ -159,9 +160,9 @@ export default function RoundEntry() {
 
   const handleCancel = () => {
     if (isEdit && selectedPlayer) {
-      dispatch({ type: ACTIONS.NAVIGATE, payload: "detail", playerId: selectedPlayer });
+      dispatch({ type: ACTIONS.NAVIGATE, payload: { screen: "detail", playerId: selectedPlayer } });
     } else {
-      dispatch({ type: ACTIONS.NAVIGATE, payload: "game" });
+      dispatch({ type: ACTIONS.NAVIGATE, payload: { screen: "game" } });
     }
   };
 
@@ -175,7 +176,7 @@ export default function RoundEntry() {
       <div className={styles.roundHeader}>
         <h2>{isEdit ? `Edit Round ${editingRound + 1}` : `Round ${game.rounds.length + 1}`}</h2>
         <button
-          className={`${styles.cheaterToggle} ${cheaterMode ? styles.cheaterActive : ""}`}
+          className={`cheaterToggle ${cheaterMode ? "cheaterActive" : ""}`}
           onClick={() => dispatch({ type: ACTIONS.TOGGLE_CHEATER })}
         >
           {cheaterMode ? "Cheater: ON" : "Cheater: OFF"}
@@ -222,23 +223,9 @@ export default function RoundEntry() {
                   </div>
                 )}
 
-                {cheaterMode && !busted && pd.numberCards.length > 0 && (() => {
-                  const dealt = getAdjustedDealt();
-                  const { bustChance, bustCards, totalRemaining } = calculateBustChance(pd.numberCards, dealt, playerData);
-                  return (
-                    <div className={`${styles.bustChanceBanner} ${
-                      bustChance >= 75 ? styles.bustDanger :
-                      bustChance >= 50 ? styles.bustWarning :
-                      bustChance >= 25 ? styles.bustCaution :
-                      styles.bustSafe
-                    }`}>
-                      <div className={styles.bustChanceValue}>{bustChance.toFixed(1)}%</div>
-                      <div className={styles.bustChanceLabel}>
-                        bust chance ({bustCards} / {totalRemaining} cards)
-                      </div>
-                    </div>
-                  );
-                })()}
+                {cheaterMode && !busted && pd.numberCards.length > 0 && (
+                  <BustChanceBanner {...calculateBustChance(pd.numberCards, getAdjustedDealt(), playerData)} />
+                )}
 
                 <div className={styles.cardPickerLabel}>Number Cards {!busted && pd.numberCards.length === 7 && "🎯 FLIP 7!"}</div>
                 <div className={styles.cardPicker}>
