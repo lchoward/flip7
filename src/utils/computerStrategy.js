@@ -12,21 +12,33 @@ export function decideAction({ playerId, hand, dealt, allPlayerData, game }) {
     return "hit";
   }
 
+  // Always hit with Second Chance active — zero downside
+  if (hand.hasSecondChance) {
+    return "hit";
+  }
+
   const { bustChance } = calculateBustChance(hand.numberCards, dealt, allPlayerData);
   const result = calculateScore(hand.numberCards, hand.modifiers, false);
   const myTotal = getPlayerTotal(game, playerId);
 
+  const cardCount = hand.numberCards.length + hand.modifiers.length + hand.actions.length;
+
+  // Early-hand auto-hit: with ≤1 card and reasonable bust chance, always hit
+  if (cardCount <= 1 && bustChance < 60) {
+    return "hit";
+  }
+
   // Base threshold: stand if bust chance >= threshold
-  let threshold = 50;
+  let threshold = 35;
 
   // Card count modifier: chase Flip 7
-  const cardCount = hand.numberCards.length + hand.modifiers.length + hand.actions.length;
-  if (cardCount >= 6) threshold += 20;
-  else if (cardCount >= 5) threshold += 10;
+  if (cardCount >= 6) threshold += 12;
+  else if (cardCount >= 5) threshold += 6;
 
   // Hand score modifier
-  if (result.total <= 5) threshold += 15;
+  if (result.total <= 5) threshold += 10;
   else if (result.total >= 30) threshold -= 10;
+  else if (result.total >= 20) threshold -= 5;
 
   // Game position modifiers
   const opponents = game.players.filter(p => p.id !== playerId);
@@ -34,20 +46,50 @@ export function decideAction({ playerId, hand, dealt, allPlayerData, game }) {
     const opponentTotals = opponents.map(p => getPlayerTotal(game, p.id));
     const maxOpponent = Math.max(...opponentTotals);
 
-    // Behind: play more aggressively
-    if (maxOpponent - myTotal > 50) threshold += 15;
-    // Ahead: play more conservatively
-    if (myTotal - maxOpponent > 30) threshold -= 10;
+    // Far behind: play more aggressively
+    if (maxOpponent - myTotal > 50) threshold += 10;
+    // Somewhat behind
+    else if (maxOpponent - myTotal > 20) threshold += 5;
+    // Well ahead: play more conservatively
+    if (myTotal - maxOpponent > 30) threshold -= 8;
 
     // Opponent close to winning
-    if (opponentTotals.some(t => t >= 170)) threshold += 12;
+    if (opponentTotals.some(t => t >= 170)) threshold += 8;
   }
 
-  // Second Chance shield: play more aggressively
-  if (hand.hasSecondChance) threshold += 15;
+  // Current-round awareness
+  const playRound = game.playRound;
+  if (playRound && playRound.playerHands) {
+    const opponentIds = opponents.map(p => p.id);
+    const opponentHands = opponentIds
+      .map(id => playRound.playerHands[id])
+      .filter(Boolean);
+
+    if (opponentHands.length > 0) {
+      const bustedCount = opponentHands.filter(h => h.busted).length;
+      const doneOpponents = opponentHands.filter(h => h.busted || h.stood);
+
+      // Most opponents busted — protect our score
+      if (bustedCount > opponentHands.length / 2) {
+        threshold -= 10;
+      }
+      // All opponents done — check if we need to catch up
+      else if (doneOpponents.length === opponentHands.length) {
+        const bestOpponentRoundScore = Math.max(
+          ...doneOpponents
+            .filter(h => !h.busted)
+            .map(h => calculateScore(h.numberCards, h.modifiers, false).total),
+          0
+        );
+        if (bestOpponentRoundScore - result.total >= 10) {
+          threshold += 8;
+        }
+      }
+    }
+  }
 
   // Clamp threshold
-  threshold = Math.max(20, Math.min(90, threshold));
+  threshold = Math.max(20, Math.min(65, threshold));
 
   return bustChance >= threshold ? "stand" : "hit";
 }
