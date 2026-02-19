@@ -7,3 +7,8 @@ When creating a pull request, check Linear for a related ticket (match by branch
 ## Testing
 
 When modifying game state logic (reducer actions, utility functions, helpers), always add or update corresponding tests. Run `npx vitest run` to verify.
+
+## Git Workflow
+- Before starting non-trivial code changes, create a new feature branch from main
+- Branch naming: feature/<short-description> or fix/<short-description>
+- Do not commit directly to main
