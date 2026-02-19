@@ -85,11 +85,9 @@ export default function SetupScreen() {
             }}
           />
           {p.isComputer && <span className="cpuBadge">CPU</span>}
-          {game.players.length > 2 && (
-            <button className={styles.removeBtn} onClick={() => {
-              updateGame({ players: game.players.filter((_, j) => j !== i) });
-            }}>×</button>
-          )}
+          <button className={styles.removeBtn} onClick={() => {
+            updateGame({ players: game.players.filter((_, j) => j !== i) });
+          }}>×</button>
         </div>
       ))}
 
