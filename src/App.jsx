@@ -4,6 +4,7 @@ import SetupScreen from "./components/SetupScreen/SetupScreen";
 import GameScreen from "./components/GameScreen/GameScreen";
 import RoundEntry from "./components/RoundEntry/RoundEntry";
 import PlayerDetail from "./components/PlayerDetail/PlayerDetail";
+import RoundDetail from "./components/RoundDetail/RoundDetail";
 import PlayGameScreen from "./components/PlayGameScreen/PlayGameScreen";
 import PlayRound from "./components/PlayRound/PlayRound";
 
@@ -28,6 +29,7 @@ function AppContent() {
       {screen === "game" && (isPlayMode ? <PlayGameScreen /> : <GameScreen />)}
       {screen === "round" && (isPlayMode ? <PlayRound /> : <RoundEntry />)}
       {screen === "detail" && <PlayerDetail />}
+      {screen === "roundDetail" && <RoundDetail />}
     </>
   );
 }

@@ -45,6 +45,15 @@ describe("NAVIGATE", () => {
     expect(result.selectedPlayer).toBe("p1");
   });
 
+  it("navigates to roundDetail with editing info", () => {
+    const result = gameReducer(makeState(), {
+      type: ACTIONS.NAVIGATE, payload: { screen: "roundDetail", editingRound: 2, playerId: "p1" },
+    });
+    expect(result.screen).toBe("roundDetail");
+    expect(result.editingRound).toBe(2);
+    expect(result.selectedPlayer).toBe("p1");
+  });
+
   it("navigates to detail with player", () => {
     const result = gameReducer(makeState(), {
       type: ACTIONS.NAVIGATE, payload: { screen: "detail", playerId: "p2" },
