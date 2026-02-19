@@ -15,42 +15,11 @@
   margin: 0;
 }
 
-.cheaterToggle {
-  padding: 6px 14px;
-  border-radius: 20px;
-  border: 2px solid var(--surface2);
-  background: var(--surface);
-  color: var(--text-dim);
-  font-family: 'Fredoka', sans-serif;
-  font-size: 12px;
-  font-weight: 500;
-  cursor: pointer;
-  transition: all 0.2s;
-}
-
-.cheaterActive {
-  border-color: var(--accent);
-  color: var(--accent);
-  background: rgba(255, 179, 71, 0.1);
-}
-
 .deckCount {
   font-size: 13px;
   color: var(--text-dim);
   margin-bottom: 16px;
   font-family: 'DM Sans', sans-serif;
-}
-
-.tiebreakerBanner {
-  background: linear-gradient(135deg, var(--accent), var(--accent2));
-  color: #fff;
-  padding: 10px 16px;
-  border-radius: var(--radius-sm);
-  font-family: 'Fredoka', sans-serif;
-  font-weight: 600;
-  font-size: 14px;
-  text-align: center;
-  margin-bottom: 16px;
 }
 
 .playerSection {
@@ -185,34 +154,6 @@
   margin-bottom: 6px;
 }
 
-.bustChanceBanner {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  padding: 6px 12px;
-  border-radius: 8px;
-  margin-top: 4px;
-  margin-bottom: 6px;
-  font-family: 'DM Sans', sans-serif;
-  font-size: 13px;
-}
-
-.bustSafe { background: rgba(46, 204, 113, 0.15); color: #2ecc71; }
-.bustCaution { background: rgba(241, 196, 15, 0.15); color: #f1c40f; }
-.bustWarning { background: rgba(230, 126, 34, 0.15); color: #e67e22; }
-.bustDanger { background: rgba(231, 76, 60, 0.15); color: #e74c3c; }
-
-.bustChanceValue {
-  font-family: 'Fredoka', sans-serif;
-  font-weight: 700;
-  font-size: 16px;
-}
-
-.bustChanceLabel {
-  font-size: 12px;
-  opacity: 0.8;
-}
-
 .actionButtons {
   display: flex;
   gap: 10px;
@@ -327,18 +268,6 @@
     transform: scale(1);
     opacity: 1;
   }
-}
-
-.cpuBadge {
-  font-size: 10px;
-  font-weight: 700;
-  padding: 2px 8px;
-  border-radius: 10px;
-  background: rgba(255, 179, 71, 0.15);
-  color: var(--accent);
-  font-family: 'Fredoka', sans-serif;
-  text-transform: uppercase;
-  letter-spacing: 0.5px;
 }
 
 .cpuThinking {

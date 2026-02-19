@@ -6,8 +6,9 @@ import HowToPlay from "../HowToPlay/HowToPlay";
 import styles from "./HomeScreen.module.css";
 
 export default function HomeScreen() {
-  const { game, dialog, dispatch } = useGame();
+  const { game, dispatch } = useGame();
   const [showHowToPlay, setShowHowToPlay] = useState(false);
+  const [confirmDialog, setConfirmDialog] = useState(null);
 
   const startNewGame = () => {
     dispatch({ type: ACTIONS.START_NEW_GAME });
@@ -15,14 +16,11 @@ export default function HomeScreen() {
 
   const confirmNewGame = () => {
     if (game && game.rounds.length > 0) {
-      dispatch({
-        type: ACTIONS.SET_DIALOG,
-        payload: {
-          title: "Start New Game?",
-          message: "This will end your current game. Are you sure?",
-          onConfirm: () => { dispatch({ type: ACTIONS.SET_DIALOG, payload: null }); startNewGame(); },
-          onCancel: () => dispatch({ type: ACTIONS.SET_DIALOG, payload: null }),
-        },
+      setConfirmDialog({
+        title: "Start New Game?",
+        message: "This will end your current game. Are you sure?",
+        onConfirm: () => { setConfirmDialog(null); startNewGame(); },
+        onCancel: () => setConfirmDialog(null),
       });
     } else {
       startNewGame();
@@ -32,14 +30,14 @@ export default function HomeScreen() {
   // Keyboard shortcut: Enter = New Game
   useEffect(() => {
     const handleKey = (e) => {
-      if (dialog || showHowToPlay) return;
+      if (confirmDialog || showHowToPlay) return;
       if (e.key === "Enter") {
         confirmNewGame();
       }
     };
     window.addEventListener("keydown", handleKey);
     return () => window.removeEventListener("keydown", handleKey);
-  }, [dialog, game, showHowToPlay]);
+  }, [confirmDialog, game, showHowToPlay]);
 
   return (
     <>
@@ -57,14 +55,14 @@ export default function HomeScreen() {
         <div className={styles.buttonGroup}>
           <button className="btn btn-primary" onClick={confirmNewGame}>New Game</button>
           {game && game.players.length > 0 && (
-            <button className="btn btn-secondary" onClick={() => dispatch({ type: ACTIONS.NAVIGATE, payload: "game" })}>
+            <button className="btn btn-secondary" onClick={() => dispatch({ type: ACTIONS.NAVIGATE, payload: { screen: "game" } })}>
               Continue Game
             </button>
           )}
           <button className="btn btn-ghost" onClick={() => setShowHowToPlay(true)}>How to Play</button>
         </div>
       </div>
-      {dialog && <ConfirmDialog {...dialog} />}
+      {confirmDialog && <ConfirmDialog {...confirmDialog} />}
       {showHowToPlay && <HowToPlay onClose={() => setShowHowToPlay(false)} />}
     </>
   );

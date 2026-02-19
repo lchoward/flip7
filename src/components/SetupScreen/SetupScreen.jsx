@@ -40,7 +40,7 @@ export default function SetupScreen() {
       cleaned.tiebreaker = null;
     }
     dispatch({ type: ACTIONS.SET_GAME, payload: cleaned });
-    dispatch({ type: ACTIONS.NAVIGATE, payload: "game" });
+    dispatch({ type: ACTIONS.NAVIGATE, payload: { screen: "game" } });
   };
 
   return (
@@ -84,7 +84,7 @@ export default function SetupScreen() {
               if (e.key === "Enter") addPlayer();
             }}
           />
-          {p.isComputer && <span className={styles.cpuBadge}>CPU</span>}
+          {p.isComputer && <span className="cpuBadge">CPU</span>}
           {game.players.length > 2 && (
             <button className={styles.removeBtn} onClick={() => {
               updateGame({ players: game.players.filter((_, j) => j !== i) });
@@ -118,7 +118,7 @@ export default function SetupScreen() {
           {isPlayMode ? "Start Playing →" : "Start Game →"}
         </button>
       </div>
-      <button className="btn btn-ghost" onClick={() => dispatch({ type: ACTIONS.NAVIGATE, payload: "home" })} style={{ marginTop: 16 }}>← Back</button>
+      <button className="btn btn-ghost" onClick={() => dispatch({ type: ACTIONS.NAVIGATE, payload: { screen: "home" } })} style={{ marginTop: 16 }}>← Back</button>
     </div>
   );
 }

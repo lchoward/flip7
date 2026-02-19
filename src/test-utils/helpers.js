@@ -1,4 +1,4 @@
-import { initialState } from "./context/gameReducer";
+import { initialState } from "../context/gameReducer";
 
 export function numberCard(v) {
   return { type: "number", value: v };

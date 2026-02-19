@@ -8,7 +8,7 @@ export default function PlayerDetail() {
   const player = game.players.find(p => p.id === selectedPlayer);
 
   if (!player) {
-    dispatch({ type: ACTIONS.NAVIGATE, payload: "game" });
+    dispatch({ type: ACTIONS.NAVIGATE, payload: { screen: "game" } });
     return null;
   }
 
@@ -16,7 +16,7 @@ export default function PlayerDetail() {
 
   return (
     <div className={`app ${styles.playerDetail} fade-in`}>
-      <button className={styles.backBtn} onClick={() => dispatch({ type: ACTIONS.NAVIGATE, payload: "game" })}>← Scoreboard</button>
+      <button className={styles.backBtn} onClick={() => dispatch({ type: ACTIONS.NAVIGATE, payload: { screen: "game" } })}>← Scoreboard</button>
       <div className={styles.header}>
         <div className={styles.name}>{player.name}</div>
         <div className={styles.total}>{total}</div>
@@ -35,7 +35,7 @@ export default function PlayerDetail() {
           <div
             key={i}
             className={styles.roundHistoryItem}
-            onClick={() => dispatch({ type: ACTIONS.NAVIGATE, payload: "round", editingRound: i, playerId: player.id })}
+            onClick={() => dispatch({ type: ACTIONS.NAVIGATE, payload: { screen: "round", editingRound: i, playerId: player.id } })}
           >
             <div>
               <div className={styles.round}>Round {i + 1}</div>

@@ -1,5 +1,13 @@
 import { DECK } from "../constants/deck";
 
+export function createEmptyDealtCards() {
+  const dealt = { numbers: {}, modifiers: {}, actions: {} };
+  for (let i = 0; i <= 12; i++) dealt.numbers[i] = 0;
+  Object.keys(DECK.modifiers).forEach(k => dealt.modifiers[k] = 0);
+  Object.keys(DECK.actions).forEach(k => dealt.actions[k] = 0);
+  return dealt;
+}
+
 export function getRemainingCards(dealtFromPastRounds, currentRoundPlayerData) {
   const remaining = {
     numbers: { ...DECK.numbers },

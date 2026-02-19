@@ -3,7 +3,7 @@ import { gameReducer, ACTIONS, initialState } from "./gameReducer";
 import {
   makeState, makeGame, makePlayRound, makeHand,
   numberCard, modifierCard, actionCard,
-} from "../test-helpers";
+} from "../test-utils/helpers";
 
 // ─── Simple State Actions ──────────────────────────────────
 
@@ -17,20 +17,20 @@ describe("SET_LOADING", () => {
 describe("NAVIGATE", () => {
   it("navigates to home and clears selection", () => {
     const state = makeState({}, { screen: "game", selectedPlayer: "p1", editingRound: 2 });
-    const result = gameReducer(state, { type: ACTIONS.NAVIGATE, payload: "home" });
+    const result = gameReducer(state, { type: ACTIONS.NAVIGATE, payload: { screen: "home" } });
     expect(result.screen).toBe("home");
     expect(result.selectedPlayer).toBeNull();
     expect(result.editingRound).toBeNull();
   });
 
   it("navigates to setup", () => {
-    const result = gameReducer(makeState(), { type: ACTIONS.NAVIGATE, payload: "setup" });
+    const result = gameReducer(makeState(), { type: ACTIONS.NAVIGATE, payload: { screen: "setup" } });
     expect(result.screen).toBe("setup");
   });
 
   it("navigates to game and clears selection", () => {
     const state = makeState({}, { selectedPlayer: "p1", editingRound: 1 });
-    const result = gameReducer(state, { type: ACTIONS.NAVIGATE, payload: "game" });
+    const result = gameReducer(state, { type: ACTIONS.NAVIGATE, payload: { screen: "game" } });
     expect(result.screen).toBe("game");
     expect(result.selectedPlayer).toBeNull();
     expect(result.editingRound).toBeNull();
@@ -38,7 +38,7 @@ describe("NAVIGATE", () => {
 
   it("navigates to round with editing info", () => {
     const result = gameReducer(makeState(), {
-      type: ACTIONS.NAVIGATE, payload: "round", editingRound: 3, playerId: "p1",
+      type: ACTIONS.NAVIGATE, payload: { screen: "round", editingRound: 3, playerId: "p1" },
     });
     expect(result.screen).toBe("round");
     expect(result.editingRound).toBe(3);
@@ -47,7 +47,7 @@ describe("NAVIGATE", () => {
 
   it("navigates to detail with player", () => {
     const result = gameReducer(makeState(), {
-      type: ACTIONS.NAVIGATE, payload: "detail", playerId: "p2",
+      type: ACTIONS.NAVIGATE, payload: { screen: "detail", playerId: "p2" },
     });
     expect(result.screen).toBe("detail");
     expect(result.selectedPlayer).toBe("p2");
@@ -55,22 +55,8 @@ describe("NAVIGATE", () => {
 
   it("returns state for unknown screen", () => {
     const state = makeState();
-    const result = gameReducer(state, { type: ACTIONS.NAVIGATE, payload: "nonexistent" });
+    const result = gameReducer(state, { type: ACTIONS.NAVIGATE, payload: { screen: "nonexistent" } });
     expect(result).toBe(state);
-  });
-});
-
-describe("SET_DIALOG", () => {
-  it("sets dialog", () => {
-    const dialog = { title: "Test", message: "Hello" };
-    const result = gameReducer(makeState(), { type: ACTIONS.SET_DIALOG, payload: dialog });
-    expect(result.dialog).toEqual(dialog);
-  });
-
-  it("clears dialog with null", () => {
-    const state = makeState({}, { dialog: { title: "X" } });
-    const result = gameReducer(state, { type: ACTIONS.SET_DIALOG, payload: null });
-    expect(result.dialog).toBeNull();
   });
 });
 
@@ -122,7 +108,6 @@ describe("START_NEW_GAME", () => {
     const result = gameReducer(makeState(), { type: ACTIONS.START_NEW_GAME, payload: {} });
     expect(result.game.mode).toBe("play");
     expect(result.screen).toBe("setup");
-    expect(result.dialog).toBeNull();
   });
 
   it("creates play game when specified", () => {
@@ -165,10 +150,9 @@ describe("SAVE_ROUND", () => {
 
 describe("RESET_DECK", () => {
   it("sets lastReshuffle to current round count", () => {
-    const state = makeState({ rounds: [1, 2, 3] }, { dialog: { title: "confirm" } });
+    const state = makeState({ rounds: [1, 2, 3] });
     const result = gameReducer(state, { type: ACTIONS.RESET_DECK });
     expect(result.game.lastReshuffle).toBe(3);
-    expect(result.dialog).toBeNull();
   });
 });
 

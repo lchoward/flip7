@@ -27,7 +27,7 @@ export default defineConfig([
     },
   },
   {
-    files: ['**/*.test.js', '**/test-helpers.js'],
+    files: ['**/*.test.js', '**/test-utils/**'],
     rules: {
       'react-refresh/only-export-components': 'off',
     },

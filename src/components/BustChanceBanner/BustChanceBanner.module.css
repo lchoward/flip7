@@ -1,0 +1,22 @@
+.bustChanceBanner {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 12px;
+  border-radius: 8px;
+  margin-top: 4px;
+  margin-bottom: 6px;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 13px;
+}
+
+.bustChanceValue {
+  font-family: 'Fredoka', sans-serif;
+  font-weight: 700;
+  font-size: 16px;
+}
+
+.bustChanceLabel {
+  font-size: 12px;
+  opacity: 0.8;
+}

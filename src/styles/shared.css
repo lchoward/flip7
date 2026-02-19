@@ -1,0 +1,170 @@
+/* ─── Shared CSS ─────────────────────────────────────
+   Global classes reused across multiple components.
+   Imported via global.css — use as plain class names. */
+
+/* CPU badge — used in PlayRound, PlayGameScreen, SetupScreen */
+.cpuBadge {
+  font-size: 10px;
+  font-weight: 700;
+  padding: 2px 8px;
+  border-radius: 10px;
+  background: rgba(255, 179, 71, 0.15);
+  color: var(--accent);
+  font-family: 'Fredoka', sans-serif;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+/* Tiebreaker banner — used in PlayRound, PlayGameScreen */
+.tiebreakerBanner {
+  background: linear-gradient(135deg, var(--accent), var(--accent2));
+  color: #fff;
+  padding: 10px 16px;
+  border-radius: var(--radius-sm);
+  font-family: 'Fredoka', sans-serif;
+  font-weight: 600;
+  font-size: 14px;
+  text-align: center;
+  margin-bottom: 16px;
+}
+
+/* Cheater toggle — used in PlayRound, RoundEntry, PlayGameScreen */
+.cheaterToggle {
+  padding: 6px 14px;
+  border-radius: 20px;
+  border: 2px solid var(--surface2);
+  background: var(--surface);
+  color: var(--text-dim);
+  font-family: 'Fredoka', sans-serif;
+  font-size: 12px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+
+.cheaterActive {
+  border-color: var(--accent);
+  color: var(--accent);
+  background: rgba(255, 179, 71, 0.1);
+}
+
+/* Bust-chance color classes — used in PlayRound, RoundEntry (via BustChanceBanner) */
+.bustSafe { background: rgba(46, 204, 113, 0.15); color: #2ecc71; }
+.bustCaution { background: rgba(241, 196, 15, 0.15); color: #f1c40f; }
+.bustWarning { background: rgba(230, 126, 34, 0.15); color: #e67e22; }
+.bustDanger { background: rgba(231, 76, 60, 0.15); color: #e74c3c; }
+
+/* ─── Scoreboard ─────────────────────────────────────
+   Shared between GameScreen and PlayGameScreen */
+
+.gameHeader {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px 0 8px 0;
+  position: sticky;
+  top: 0;
+  background: var(--bg);
+  z-index: 10;
+}
+
+.gameTitle {
+  font-family: 'Fredoka', sans-serif;
+  font-size: 24px;
+  font-weight: 700;
+  color: var(--primary);
+}
+
+.roundBadge {
+  background: var(--surface2);
+  padding: 6px 14px;
+  border-radius: 20px;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text-dim);
+}
+
+.winnerBanner {
+  background: linear-gradient(135deg, #ffb347, #ff6b6b);
+  border-radius: var(--radius);
+  padding: 20px;
+  text-align: center;
+  margin-bottom: 16px;
+  animation: pop 0.4s ease-out;
+}
+
+.winnerBanner h3 {
+  font-size: 24px;
+  color: #fff;
+}
+
+.winnerBanner p {
+  color: rgba(255,255,255,0.85);
+  font-size: 14px;
+}
+
+.scoreboard { margin-bottom: 12px; }
+
+.playerRow {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 14px 16px;
+  background: var(--surface);
+  border-radius: var(--radius-sm);
+  margin-bottom: 8px;
+  cursor: pointer;
+  transition: all 0.2s;
+  border: 2px solid transparent;
+}
+
+.playerRow:hover { border-color: var(--primary); }
+.playerRow.leader { border-color: var(--accent); }
+
+.rank {
+  font-family: 'Fredoka', sans-serif;
+  font-weight: 700;
+  font-size: 18px;
+  color: var(--text-dim);
+  width: 28px;
+  text-align: center;
+}
+
+.rank.gold { color: var(--accent); }
+
+.playerInfo { flex: 1; }
+
+.scoreboardPlayerName {
+  font-weight: 600;
+  font-size: 16px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.playerLastRound {
+  font-size: 12px;
+  color: var(--text-dim);
+  margin-top: 2px;
+}
+
+.scoreboardPlayerScore {
+  font-family: 'Fredoka', sans-serif;
+  font-weight: 700;
+  font-size: 28px;
+  color: var(--primary);
+}
+
+.playerRow.leader .scoreboardPlayerScore { color: var(--accent); }
+
+.arrowIcon {
+  color: var(--text-dim);
+  font-size: 18px;
+}
+
+.actionBar {
+  display: flex;
+  gap: 10px;
+  margin: 16px 0;
+  flex-wrap: wrap;
+}
