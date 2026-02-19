@@ -3,7 +3,6 @@ import { useGame } from "../../context/GameContext";
 import { ACTIONS } from "../../context/gameReducer";
 import { calculateScore } from "../../utils/scoring";
 import { calculateBustChance } from "../../utils/bustCalculator";
-import { flattenHandWithCancelled } from "../../utils/handUtils";
 import { decideAction, chooseFlipThreeTarget, chooseSecondChanceTarget } from "../../utils/computerStrategy";
 import { getPlayerTotal } from "../../utils/helpers";
 import CardVisual from "../CardVisual/CardVisual";
@@ -100,9 +99,7 @@ export default function PlayRound() {
         playerId: activePid,
         hand,
         dealt: getEffectiveDealtCards(),
-        allPlayerData: Object.fromEntries(
-          Object.entries(pr.playerHands).map(([pid, h]) => [pid, flattenHandWithCancelled(h)])
-        ),
+        allPlayerData: {},
         game,
       });
       if (action === "hit") {
@@ -123,11 +120,6 @@ export default function PlayRound() {
 
   const getPlayerName = (pid) => game.players.find(p => p.id === pid)?.name || "?";
   const isComputerPlayer = (pid) => game.players.find(p => p.id === pid)?.isComputer === true;
-
-  // Build allPlayerData for bust calc (includes cancelled cards for accurate remaining-card counts)
-  const allPlayerData = Object.fromEntries(
-    Object.entries(pr.playerHands).map(([pid, hand]) => [pid, flattenHandWithCancelled(hand)])
-  );
 
   const dealt = getEffectiveDealtCards();
 
@@ -319,7 +311,7 @@ export default function PlayRound() {
             )}
 
             {cheaterMode && hand.status === "playing" && hand.numberCards.length > 0 && dealt && (
-              <BustChanceBanner {...calculateBustChance(hand.numberCards, dealt, allPlayerData)} />
+              <BustChanceBanner {...calculateBustChance(hand.numberCards, dealt, {})} />
             )}
 
             {isActive && isComputerPlayer(pid) && (
